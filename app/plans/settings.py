@@ -30,7 +30,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 APPS = [
-    'countries'
+    'countries',
+    'portfolios'
 ]
 
 THIRD_PARTY_APPS = [
