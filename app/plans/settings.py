@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 APPS = ["countries", "portfolios"]
 
-THIRD_PARTY_APPS = ["rest_framework"]
+THIRD_PARTY_APPS = ["graphene_django"]
 
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -130,3 +130,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+GRAPHENE = {
+    "SCHEMA": "countries.schema.schema"
+}
