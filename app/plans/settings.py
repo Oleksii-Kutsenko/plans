@@ -29,9 +29,9 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-APPS = ["countries", "portfolios"]
+APPS = ["countries", "investments"]
 
-THIRD_PARTY_APPS = ["rest_framework"]
+THIRD_PARTY_APPS = []
 
 DJANGO_APPS = [
     "django.contrib.admin",

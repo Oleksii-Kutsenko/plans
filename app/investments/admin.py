@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from portfolios.models import LazyPortfolio, Ticker, LazyPortfolioTicker
+from investments.models import LazyPortfolio, Ticker, LazyPortfolioTicker
 
 
 class LazyPortfolioTickerInline(admin.TabularInline):
