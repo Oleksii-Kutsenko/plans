@@ -6,7 +6,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('portfolios', '0001_initial'), ('portfolios', '0002_remove_ticker_type_ticker_asset_type_ticker_name_and_more'), ('portfolios', '0003_alter_ticker_expense_ratio'), ('portfolios', '0004_alter_ticker_inception_date')]
+    replaces = [('investments', '0001_initial'), ('investments', '0002_remove_ticker_type_ticker_asset_type_ticker_name_and_more'), ('investments', '0003_alter_ticker_expense_ratio'), ('investments', '0004_alter_ticker_inception_date')]
 
     initial = True
 
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('weight', models.FloatField()),
-                ('portfolio', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='portfolios.lazyportfolio')),
+                ('portfolio', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='investments.lazyportfolio')),
             ],
         ),
         migrations.CreateModel(
@@ -36,8 +36,8 @@ class Migration(migrations.Migration):
                 ('expense_ratio', models.FloatField(null=True)),
                 ('inception_date', models.DateField(null=True)),
                 ('symbol', models.CharField(max_length=100, unique=True)),
-                ('equivalents', models.ManyToManyField(blank=True, to='portfolios.ticker')),
-                ('portfolio', models.ManyToManyField(through='portfolios.LazyPortfolioTicker', to='portfolios.lazyportfolio')),
+                ('equivalents', models.ManyToManyField(blank=True, to='investments.ticker')),
+                ('portfolio', models.ManyToManyField(through='investments.LazyPortfolioTicker', to='investments.lazyportfolio')),
                 ('asset_type', models.CharField(choices=[('Bonds', 'Bonds'), ('Commodities', 'Commodities'), ('Real Estate', 'Real Estate'), ('Stocks', 'Stocks')], default='Stocks', max_length=15)),
                 ('name', models.CharField(default=None, max_length=100)),
             ],
@@ -45,6 +45,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='lazyportfolioticker',
             name='ticker',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='portfolios.ticker'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='investments.ticker'),
         ),
     ]

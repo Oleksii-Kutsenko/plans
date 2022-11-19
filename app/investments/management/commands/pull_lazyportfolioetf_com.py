@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from django.core.management import BaseCommand
 
-from portfolios.models import Ticker, LazyPortfolio, LazyPortfolioTicker
+from investments.models import Ticker, LazyPortfolio, LazyPortfolioTicker
 
 TICKER_TYPES_MAPPING = {
     "Bond": Ticker.TickerTypes.BONDS,
@@ -56,7 +56,7 @@ class Command(BaseCommand):
                     content = future.result()
                 except Exception as exc:
                     print(f"{url}, {exc}")
-                    raise Exception("Error to fetch portfolios") from exc
+                    raise Exception("Error to fetch investments") from exc
                 else:
                     self.process_portfolio_web_page(content)
 

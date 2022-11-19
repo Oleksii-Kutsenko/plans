@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class LazyPortfolio(models.Model):
     """
-    Model that represents portfolios
+    Model that represents investments
     """
     name = models.CharField(max_length=100, unique=True)
 
