@@ -1,16 +1,29 @@
+"""
+Models for the investments' app.
+"""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class LazyPortfolio(models.Model):
+class Portfolio(models.Model):
     """
     Model that represents investments
     """
 
     name = models.CharField(max_length=100, unique=True)
+    max_drawdown = models.FloatField(null=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.name}"
+
+    def get_allocation(self) -> dict:
+        """
+        Returns allocation of this portfolio
+        """
+        return {
+            ticker.ticker.symbol: round(ticker.weight / 100, 4)
+            for ticker in self.tickers.all()
+        }
 
 
 class Ticker(models.Model):
@@ -19,6 +32,9 @@ class Ticker(models.Model):
     """
 
     class TickerTypes(models.TextChoices):
+        """
+        Ticker types
+        """
         BONDS = "Bonds", _("Bonds")
         COMMODITIES = "Commodities", _("Commodities")
         REAL_ESTATE = "Real Estate", _("Real Estate")
@@ -28,7 +44,7 @@ class Ticker(models.Model):
     expense_ratio = models.FloatField(blank=True, null=True)
     inception_date = models.DateField(blank=True, null=True)
     name = models.CharField(max_length=100)
-    portfolio = models.ManyToManyField(LazyPortfolio, through="LazyPortfolioTicker")
+    portfolio = models.ManyToManyField(Portfolio, through="PortfolioTicker")
     symbol = models.CharField(max_length=100, unique=True)
     asset_type = models.CharField(
         max_length=15, choices=TickerTypes.choices, default=TickerTypes.STOCKS
@@ -38,13 +54,13 @@ class Ticker(models.Model):
         return f"{self.symbol}"
 
 
-class LazyPortfolioTicker(models.Model):
+class PortfolioTicker(models.Model):
     """
     Helper model for M2M relationship between Tickers and Portfolios
     """
 
-    portfolio = models.ForeignKey(LazyPortfolio, models.CASCADE)
-    ticker = models.ForeignKey(Ticker, models.CASCADE)
+    portfolio = models.ForeignKey(Portfolio, models.PROTECT, related_name="tickers")
+    ticker = models.ForeignKey(Ticker, models.PROTECT)
     weight = models.FloatField(null=False)
 
     def __str__(self) -> str:
