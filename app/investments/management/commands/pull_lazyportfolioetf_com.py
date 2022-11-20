@@ -1,10 +1,13 @@
+"""
+Lazy Portfolio ETFs scraper
+"""
 import concurrent.futures
 
 import requests
 from bs4 import BeautifulSoup
 from django.core.management import BaseCommand
 
-from investments.models import Ticker, LazyPortfolio, LazyPortfolioTicker
+from investments.models import Ticker, Portfolio, PortfolioTicker
 
 TICKER_TYPES_MAPPING = {
     "Bond": Ticker.TickerTypes.BONDS,
@@ -38,6 +41,7 @@ class Command(BaseCommand):
     """
     Parses http://www.lazyportfolioetf.com/allocation/ web page and all related web pages
     """
+
     LAZY_PORTFOLIO_ROOT = "http://www.lazyportfolioetf.com/allocation/"
 
     def handle(self, *args: tuple, **options: dict) -> None:
@@ -74,22 +78,20 @@ class Command(BaseCommand):
         portfolio_name = portfolio_soup.find(
             "h1", class_="title entry-title"
         ).text.split(":")[0]
-        lazy_portfolio, created = LazyPortfolio.objects.get_or_create(
-            name=portfolio_name
-        )
+        lazy_portfolio, created = Portfolio.objects.get_or_create(name=portfolio_name)
         if created:
             print(f"New portfolio {lazy_portfolio} has been created")
             self.create_lazy_portfolio_tickers(lazy_portfolio, portfolio_soup)
 
     def create_lazy_portfolio_tickers(
-        self, lazy_portfolio: LazyPortfolio, portfolio_soup: BeautifulSoup
+        self, portfolio: Portfolio, portfolio_soup: BeautifulSoup
     ) -> None:
         """
         Creates LazyPortfolioTicker objects for the given LazyPortfolio instance from the portfolio
          web page packed in the Beautiful Soup container
 
         Args:
-            lazy_portfolio: Instance of LazyPortfolio class
+            portfolio: Instance of LazyPortfolio class
             portfolio_soup: Container with portfolio web page content
 
         Returns:
@@ -98,9 +100,11 @@ class Command(BaseCommand):
         portfolio_table = portfolio_soup.find_all("table", id="portfolioAllocation")[
             0
         ].find("tbody")
+        portfolio_tickers = []
+
         for portfolio_table_row in portfolio_table.find_all("tr"):
             portfolio_table_data = portfolio_table_row.find_all("td")
-            percentage = float(portfolio_table_data[0].text.replace("%", ""))
+            weight = float(portfolio_table_data[0].text.replace("%", ""))
             symbol = portfolio_table_data[2].text
             name = portfolio_table_data[3].text
             asset_type = self.map_asset_type(portfolio_table_data[4].text.strip())
@@ -110,11 +114,14 @@ class Command(BaseCommand):
                 ticker = Ticker.objects.create(
                     name=name, symbol=symbol, asset_type=asset_type
                 )
-            LazyPortfolioTicker.objects.create(
-                weight=percentage,
-                ticker=ticker,
-                portfolio=lazy_portfolio,
+            portfolio_tickers.append(
+                PortfolioTicker(
+                    portfolio=portfolio,
+                    ticker=ticker,
+                    weight=weight,
+                )
             )
+        PortfolioTicker.objects.bulk_create(portfolio_tickers)
 
     @staticmethod
     def get_portfolio_links(portfolio_root_soup: BeautifulSoup) -> list[str]:
@@ -135,7 +142,7 @@ class Command(BaseCommand):
         for portfolio in portfolio_list.find_all("li"):
             portfolio_link = portfolio.find("a")
             portfolio_name = portfolio_link.text
-            if LazyPortfolio.objects.filter(name=portfolio_name).exists():
+            if Portfolio.objects.filter(name=portfolio_name).exists():
                 continue
             portfolio_links.append(portfolio_link["href"])
         return portfolio_links
