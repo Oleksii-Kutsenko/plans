@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import pycountry
 from django.core.management.base import BaseCommand, CommandParser
 
-from countries.models import CountryEconomicFreedomIndex
+from countries.models import CountryEconomicFreedomIndex, Country
 
 
 class HTMLTagName(Enum):
@@ -103,10 +103,10 @@ class Command(BaseCommand):
                             score = 0
 
                     if country and score:
+                        country_obj = Country.objects.get(iso_code=country.alpha_3)
                         country_economic_freedom_index_objects.append(
                             CountryEconomicFreedomIndex(
-                                country_iso_code=country.alpha_3,
-                                country=country.name,
+                                country=country_obj,
                                 score=score,
                                 year=data_year,
                             )
