@@ -1,3 +1,6 @@
+"""
+Command to pull countries data from the web page or load old data from the file
+"""
 from datetime import date
 from enum import Enum
 from pathlib import Path
@@ -8,7 +11,7 @@ from bs4 import BeautifulSoup
 import pycountry
 from django.core.management.base import BaseCommand, CommandParser
 
-from countries.models import CountryEconomicFreedomIndex, Country
+from ...models import CountryEconomicFreedomIndex, Country
 
 
 class HTMLTagName(Enum):

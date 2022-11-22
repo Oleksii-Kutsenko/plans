@@ -35,9 +35,6 @@ class Migration(migrations.Migration):
                 ('year', models.IntegerField()),
                 ('country_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='countries.country')),
             ],
-            options={
-                'unique_together': {('country_iso_code', 'year')},
-            },
         ),
         migrations.AlterUniqueTogether(
             name='countryeconomicfreedomindex',

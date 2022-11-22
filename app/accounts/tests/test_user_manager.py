@@ -1,6 +1,12 @@
+"""
+User manager test cases
+"""
+from datetime import date
 from unittest import TestCase
 
 from django.contrib.auth import get_user_model
+
+from countries.tests.factories.country import CountryFactory
 
 User = get_user_model()
 
@@ -10,13 +16,17 @@ class UserManagerTests(TestCase):
     Test the custom user manager
     """
 
-    def test_create_user(self):
+    def test_create_user(self) -> None:
         """
         Test creating a user
+        Returns:
+            None
         """
         expected_email = "test@gmail.com"
 
-        user = User.objects.create_user(email=expected_email, password="testpass123")
+        user = User.objects.create_user(
+            email=expected_email, password="testpass123", birth_date=date(1990, 1, 1), country=CountryFactory()
+        )
         self.assertEqual(user.email, expected_email)
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
@@ -31,11 +41,16 @@ class UserManagerTests(TestCase):
 
         user.delete()
 
-    def test_create_superuser(self):
+    def test_create_superuser(self) -> None:
+        """
+        Test creating a superuser
+        Returns:
+            None
+        """
         expected_email = "test@gmail.com"
 
         admin_user = User.objects.create_superuser(
-            email=expected_email, password="testpass123"
+            email=expected_email, password="testpass123", birth_date=date(1990, 1, 1), country=CountryFactory()
         )
         self.assertEqual(admin_user.email, expected_email)
         self.assertTrue(admin_user.is_active)

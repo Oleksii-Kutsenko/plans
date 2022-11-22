@@ -1,21 +1,31 @@
+"""
+Countries models
+"""
 import pycountry
 from django.db import models
 
-country_iso_codes = [(country.alpha_3, country.alpha_3) for country in pycountry.countries]
+country_iso_codes = [
+    (country.alpha_3, country.alpha_3) for country in pycountry.countries
+]
 
 
 class Country(models.Model):
     """
     Country model
     """
+
     name = models.CharField(max_length=255)
     iso_code = models.CharField(max_length=4, unique=True, choices=country_iso_codes)
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return f"{self.name}"
 
 
 class CountryEconomicFreedomIndex(models.Model):
+    """
+    Country Economic Freedom Index model
+    """
+
     country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True)
     score = models.FloatField()
     year = models.IntegerField()
