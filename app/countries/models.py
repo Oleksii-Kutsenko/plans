@@ -1,14 +1,34 @@
+"""
+Countries models
+"""
+import pycountry
 from django.db import models
+
+country_iso_codes = [
+    (country.alpha_3, country.alpha_3) for country in pycountry.countries
+]
+
+
+class Country(models.Model):
+    """
+    Country model
+    """
+
+    name = models.CharField(max_length=255)
+    iso_code = models.CharField(max_length=4, unique=True, choices=country_iso_codes)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
 
 
 class CountryEconomicFreedomIndex(models.Model):
-    country_iso_code = models.CharField(max_length=4)
-    country = models.CharField(max_length=100)
+    """
+    Country Economic Freedom Index model
+    """
+
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True)
     score = models.FloatField()
     year = models.IntegerField()
 
-    class Meta:
-        unique_together = ("country_iso_code", "year")
-
     def __str__(self) -> str:
-        return f"{self.country_iso_code} {self.country} {self.score} {self.year}"
+        return f"{self.country} {self.score} {self.year}"

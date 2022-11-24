@@ -11,6 +11,11 @@ class Portfolio(models.Model):
     """
 
     name = models.CharField(max_length=100, unique=True)
+    cagr = models.FloatField(null=True, help_text=_("Compound annual growth rate"))
+    standard_deviation = models.FloatField(null=True)
+    sharpe = models.FloatField(null=True)
+    sortino = models.FloatField(null=True)
+    market_correlation = models.FloatField(null=True)
     max_drawdown = models.FloatField(null=True, blank=True)
 
     def __str__(self) -> str:

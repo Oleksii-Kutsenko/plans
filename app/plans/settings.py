@@ -25,14 +25,16 @@ SECRET_KEY = "django-insecure-@3z@0k6)^&samrh2e*n^fv9af40lg^2b+h$&**io(4yu-5g0$%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["127.0.0.1"]
+INTERNAL_IPS = (
+    "127.0.0.1",
+    "0.0.0.0",
+    "localhost",
+)
 
 # Application definition
-APPS = ["countries", "investments"]
-
-THIRD_PARTY_APPS = []
-
+APPS = ["countries", "investments", "accounts"]
+THIRD_PARTY_APPS = ["graphene_django"]
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -43,6 +45,9 @@ DJANGO_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + APPS
+if DEBUG:
+    DEV_APPS = ["debug_toolbar"]
+    INSTALLED_APPS += DEV_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -52,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "plans.urls"
@@ -130,3 +136,26 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+GRAPHENE = {"SCHEMA": "investments.schema.schema"}
+
+AUTH_USER_MODEL = "accounts.User"
+
+DEBUG_TOOLBAR_PANELS = [
+    "debug_toolbar.panels.history.HistoryPanel",
+    "debug_toolbar.panels.versions.VersionsPanel",
+    "debug_toolbar.panels.timer.TimerPanel",
+    "debug_toolbar.panels.settings.SettingsPanel",
+    "debug_toolbar.panels.headers.HeadersPanel",
+    "debug_toolbar.panels.request.RequestPanel",
+    "debug_toolbar.panels.sql.SQLPanel",
+    "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+    "debug_toolbar.panels.templates.TemplatesPanel",
+    "debug_toolbar.panels.cache.CachePanel",
+    "debug_toolbar.panels.signals.SignalsPanel",
+    "debug_toolbar.panels.logging.LoggingPanel",
+    "debug_toolbar.panels.redirects.RedirectsPanel",
+    "debug_toolbar.panels.profiling.ProfilingPanel",
+]
+
+DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG}

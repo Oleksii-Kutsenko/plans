@@ -1,3 +1,6 @@
+"""
+Command to pull countries data from the web page or load old data from the file
+"""
 from datetime import date
 from enum import Enum
 from pathlib import Path
@@ -8,7 +11,7 @@ from bs4 import BeautifulSoup
 import pycountry
 from django.core.management.base import BaseCommand, CommandParser
 
-from countries.models import CountryEconomicFreedomIndex
+from ...models import CountryEconomicFreedomIndex, Country
 
 
 class HTMLTagName(Enum):
@@ -103,10 +106,10 @@ class Command(BaseCommand):
                             score = 0
 
                     if country and score:
+                        country_obj = Country.objects.get(iso_code=country.alpha_3)
                         country_economic_freedom_index_objects.append(
                             CountryEconomicFreedomIndex(
-                                country_iso_code=country.alpha_3,
-                                country=country.name,
+                                country=country_obj,
                                 score=score,
                                 year=data_year,
                             )
@@ -126,15 +129,20 @@ class Command(BaseCommand):
             None
         """
         eco_dataframe = pd.read_excel(self.OLD_ECONOMIC_FREEDOM_INDEX_DATA)
-        country_economic_freedom_index_objects = [
-            CountryEconomicFreedomIndex(
-                country_iso_code=row.country_iso_code,
-                country=row.country,
-                score=row.score,
-                year=row.year,
+        country_economic_freedom_index_objects = []
+        for _, row in eco_dataframe.iterrows():
+            country = Country.objects.get_or_create(
+                iso_code=row["country_iso_code"],
+                name=pycountry.countries.get(alpha_3=row["country_iso_code"]).name,
+            )[0]
+            country_economic_freedom_index_objects.append(
+                CountryEconomicFreedomIndex(
+                    country=country,
+                    score=row["score"],
+                    year=row["year"],
+                )
             )
-            for index, row in eco_dataframe.iterrows()
-        ]
+
         CountryEconomicFreedomIndex.objects.bulk_create(
             country_economic_freedom_index_objects
         )

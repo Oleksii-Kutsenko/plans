@@ -1,0 +1,2 @@
+django-debug-toolbar==3.7.0
+-r requirements-tests.txt

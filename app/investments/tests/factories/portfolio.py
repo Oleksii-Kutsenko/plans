@@ -11,23 +11,27 @@ class PortfolioFactory(factory.django.DjangoModelFactory):
     """
     Portfolio factory
     """
+
     class Meta:
         """
         Meta class
         """
+
         model = Portfolio
 
-    name = factory.Faker("name")
+    name = factory.Sequence(lambda n: f"Portfolio {n}")
 
 
 class PortfolioTickerFactory(factory.django.DjangoModelFactory):
     """
     PortfolioTicker factory
     """
+
     class Meta:
         """
         Meta class
         """
+
         model = PortfolioTicker
 
     portfolio = factory.SubFactory(PortfolioFactory)
