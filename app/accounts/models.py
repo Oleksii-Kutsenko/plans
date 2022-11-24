@@ -3,6 +3,7 @@ Accounts models
 """
 import datetime
 
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -13,6 +14,14 @@ class User(AbstractUser):
     """
     Custom user model
     """
+
+    class GenderTypes(models.TextChoices):
+        """
+        Ticker types
+        """
+
+        MALE = "Male", _("Male")
+        FEMALE = "Female", _("Female")
 
     country = models.ForeignKey(
         "countries.Country", on_delete=models.CASCADE, null=False
@@ -48,6 +57,7 @@ class User(AbstractUser):
         Returns:
             int: user life expectancy
         """
+        assert self.gender
         return getattr(
             self.country.pension_system_information,
             f"{self.gender.lower()}_life_expectancy",
@@ -59,6 +69,7 @@ class User(AbstractUser):
         Returns:
             int: user pension age
         """
+        assert self.gender
         return getattr(
             self.country.pension_system_information,
             f"{self.gender.lower()}_pension_age",

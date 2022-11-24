@@ -46,7 +46,6 @@ def get_personal_max_drawdown(user):
     Returns:
 
     """
-    print(user)
     min_age = AGE_OF_MAJORITY
     max_age = user.get_pension_age()
     max_drawdown = Portfolio.objects.aggregate(Min("max_drawdown"))["max_drawdown__min"]
@@ -55,7 +54,6 @@ def get_personal_max_drawdown(user):
 
     user_age = user.get_age()
     personal_max_drawdown = result[0] * user_age**2 + result[1] * user_age + result[2]
-    print(personal_max_drawdown)
     return personal_max_drawdown
 
 

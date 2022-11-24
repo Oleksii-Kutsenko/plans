@@ -13,7 +13,13 @@ class CountryFactory(factory.django.DjangoModelFactory):
         """
         Meta class
         """
-        model = Country
 
-    name = factory.LazyAttribute(lambda o: pycountry.countries.get(alpha_3=o.iso_code))
-    iso_code = factory.fuzzy.FuzzyChoice(choices=country_iso_codes, getter=lambda c: c[0])
+        model = Country
+        django_get_or_create = ("iso_code", "name")
+
+    name = factory.LazyAttribute(
+        lambda o: pycountry.countries.get(alpha_3=o.iso_code).name
+    )
+    iso_code = factory.fuzzy.FuzzyChoice(
+        choices=country_iso_codes, getter=lambda c: c[0]
+    )

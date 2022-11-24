@@ -4,6 +4,7 @@ from unittest.mock import patch, MagicMock
 from django.core.management import call_command
 from django.test import TestCase
 
+from investments.models import PortfolioTicker, Portfolio
 from ..factories.portfolio import PortfolioTickerFactory, PortfolioFactory
 
 
@@ -35,3 +36,7 @@ class CalculatePortfoliosMaxDrawdownCommandTests(TestCase):
             portfolio.get_allocation(), rebalance="no"
         )
         assert portfolio.max_drawdown == backtest.max_drawdown
+
+    def tearDown(self) -> None:
+        PortfolioTicker.objects.all().delete()
+        Portfolio.objects.all().delete()

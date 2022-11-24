@@ -129,15 +129,20 @@ class Command(BaseCommand):
             None
         """
         eco_dataframe = pd.read_excel(self.OLD_ECONOMIC_FREEDOM_INDEX_DATA)
-        country_economic_freedom_index_objects = [
-            CountryEconomicFreedomIndex(
-                country_iso_code=row.country_iso_code,
-                country=row.country,
-                score=row.score,
-                year=row.year,
+        country_economic_freedom_index_objects = []
+        for _, row in eco_dataframe.iterrows():
+            country = Country.objects.get_or_create(
+                iso_code=row["country_iso_code"],
+                name=pycountry.countries.get(alpha_3=row["country_iso_code"]).name,
+            )[0]
+            country_economic_freedom_index_objects.append(
+                CountryEconomicFreedomIndex(
+                    country=country,
+                    score=row["score"],
+                    year=row["year"],
+                )
             )
-            for index, row in eco_dataframe.iterrows()
-        ]
+
         CountryEconomicFreedomIndex.objects.bulk_create(
             country_economic_freedom_index_objects
         )

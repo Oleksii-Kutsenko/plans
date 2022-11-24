@@ -4,5 +4,7 @@ omit =
     */migrations/*
     */apps.py
     */wsgi.py
+    */asgi.py
     *manage.py
-
+source =
+    .

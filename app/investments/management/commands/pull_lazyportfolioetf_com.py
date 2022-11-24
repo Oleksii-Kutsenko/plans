@@ -5,12 +5,13 @@ import concurrent.futures
 
 import requests
 from bs4 import BeautifulSoup
-from django.core.management import BaseCommand
+from django.core.management import BaseCommand, CommandParser
 
 from investments.models import Ticker, Portfolio, PortfolioTicker
 
 TICKER_TYPES_MAPPING = {
     "Bond": Ticker.TickerTypes.BONDS,
+    "Bonds": Ticker.TickerTypes.BONDS,
     "Commodity": Ticker.TickerTypes.COMMODITIES,
     "Commodities": Ticker.TickerTypes.COMMODITIES,
     "Equity": Ticker.TickerTypes.STOCKS,
@@ -44,10 +45,16 @@ class Command(BaseCommand):
 
     LAZY_PORTFOLIO_ROOT = "http://www.lazyportfolioetf.com/allocation/"
 
+    def add_arguments(self, parser: CommandParser) -> None:
+        parser.add_argument("--limit", nargs="?", type=int)
+
     def handle(self, *args: tuple, **options: dict) -> None:
         response = requests.get(self.LAZY_PORTFOLIO_ROOT, timeout=60)
         portfolio_root_soup = BeautifulSoup(response.content, "html.parser")
         portfolio_links = self.get_portfolio_links(portfolio_root_soup)
+
+        limit = options.get("limit", None)
+        portfolio_links = portfolio_links[:limit]
 
         workers = len(portfolio_links) // 10 + 1
         with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
@@ -60,7 +67,7 @@ class Command(BaseCommand):
                     content = future.result()
                 except Exception as exc:
                     print(f"{url}, {exc}")
-                    raise Exception("Error to fetch investments") from exc
+                    raise Exception("Error to fetch portfolio") from exc
                 else:
                     self.process_portfolio_web_page(content)
 
@@ -75,9 +82,11 @@ class Command(BaseCommand):
             None
         """
         portfolio_soup = BeautifulSoup(content, "html.parser")
-        portfolio_name = portfolio_soup.find(
-            "h1", class_="title entry-title"
-        ).text.split(":")[0]
+        portfolio_name = (
+            portfolio_soup.find("h1", class_="title entry-title")
+            .text.split(":")[0]
+            .strip()
+        )
         lazy_portfolio, created = Portfolio.objects.get_or_create(name=portfolio_name)
         if created:
             print(f"New portfolio {lazy_portfolio} has been created")
@@ -105,8 +114,8 @@ class Command(BaseCommand):
         for portfolio_table_row in portfolio_table.find_all("tr"):
             portfolio_table_data = portfolio_table_row.find_all("td")
             weight = float(portfolio_table_data[0].text.replace("%", ""))
-            symbol = portfolio_table_data[2].text
-            name = portfolio_table_data[3].text
+            symbol = portfolio_table_data[2].text.strip()
+            name = portfolio_table_data[3].text.strip()
             asset_type = self.map_asset_type(portfolio_table_data[4].text.strip())
 
             ticker = Ticker.objects.filter(symbol=symbol).first()
