@@ -2,9 +2,9 @@
 User manager test cases
 """
 from datetime import date
-from unittest import TestCase
 
 from django.contrib.auth import get_user_model
+from django.test import TestCase
 
 from countries.tests.factories.country import CountryFactory
 
@@ -25,7 +25,10 @@ class UserManagerTests(TestCase):
         expected_email = "test@gmail.com"
 
         user = User.objects.create_user(
-            email=expected_email, password="testpass123", birth_date=date(1990, 1, 1), country=CountryFactory()
+            email=expected_email,
+            password="testpass123",
+            birth_date=date(1990, 1, 1),
+            country=CountryFactory(),
         )
         self.assertEqual(user.email, expected_email)
         self.assertTrue(user.is_active)
@@ -50,7 +53,10 @@ class UserManagerTests(TestCase):
         expected_email = "test@gmail.com"
 
         admin_user = User.objects.create_superuser(
-            email=expected_email, password="testpass123", birth_date=date(1990, 1, 1), country=CountryFactory()
+            email=expected_email,
+            password="testpass123",
+            birth_date=date(1990, 1, 1),
+            country=CountryFactory(),
         )
         self.assertEqual(admin_user.email, expected_email)
         self.assertTrue(admin_user.is_active)

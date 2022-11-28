@@ -1,9 +1,9 @@
-from unittest import TestCase
 from unittest.mock import patch, MagicMock
 
 import requests
 from bs4 import BeautifulSoup
 from django.core.management import call_command
+from django.test import TestCase
 from factory import BUILD_STRATEGY
 
 from investments.management.commands.pull_lazyportfolioetf_com import Command
@@ -66,10 +66,9 @@ def generate_portfolio_page() -> str:
 
 
 class PullLazyPortfolioETFcomTestCase(TestCase):
-    def setUp(self) -> None:
-        PortfolioTicker.objects.all().delete()
-        Portfolio.objects.all().delete()
-        Ticker.objects.all().delete()
+    """
+    TestCases for pull_lazyportfolioetf_com command
+    """
 
     @patch("investments.management.commands.pull_lazyportfolioetf_com.load_url")
     def test_pull_lazyportfolioetf_com(self, mock_load_url: MagicMock) -> None:

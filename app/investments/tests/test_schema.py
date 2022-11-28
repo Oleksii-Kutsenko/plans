@@ -1,31 +1,79 @@
-from unittest import TestCase
+import datetime
 
-from django.core.management import call_command
+from graphene_django.utils.testing import GraphQLTestCase
 
-from accounts.models import User
 from accounts.tests.factories.pension_system_information import (
     PensionSystemInformationFactory,
 )
 from accounts.tests.factories.user import UserFactory
-from investments.models import PortfolioTicker, Portfolio
 from investments.schema import get_personal_max_drawdown
 
 
-class SchemaTestCases(TestCase):
+class SchemaTestCases(GraphQLTestCase):
+    """
+    TestCases for investments app schema
+    """
+
+    fixtures = ["investments/tests/investments_fixtures.json"]
+
     def setUp(self) -> None:
-        Portfolio.objects.all().delete()
-        User.objects.all().delete()
+        pension_system_information = PensionSystemInformationFactory()
+        self.user = UserFactory(country=pension_system_information.country)
+        self.client.force_login(self.user)
 
     def test_get_personal_max_drawdown(self) -> None:
-        pension_system_information = PensionSystemInformationFactory()
-        user = UserFactory(country=pension_system_information.country)
-        call_command("pull_lazyportfolioetf_com", limit=10)
-        call_command("calculate_portfolios_statistics", force_recalculation=True)
+        """
+        Test get_personal_max_drawdown function
+        Returns:
+            None
+        """
+        personal_max_drawdown = get_personal_max_drawdown(self.user)
 
-        personal_max_drawdown = get_personal_max_drawdown(user)
+        self.assertTrue(-1 <= personal_max_drawdown <= 0)
 
-        self.assertGreater(personal_max_drawdown, -1)
-        self.assertLess(personal_max_drawdown, 0)
+        self.user.birth_date = datetime.date(
+            (datetime.date.today() - datetime.timedelta(days=5 * 365)).year, 1, 1
+        )
+        self.user.save()
 
-    def tearDown(self) -> None:
-        PortfolioTicker.objects.all().delete()
+        personal_max_drawdown = get_personal_max_drawdown(self.user)
+
+        self.assertTrue(-1 <= personal_max_drawdown <= 0)
+
+        self.user.birth_date = datetime.date(
+            (datetime.date.today() - datetime.timedelta(days=150 * 365)).year, 1, 1
+        )
+        self.user.save()
+
+        personal_max_drawdown = get_personal_max_drawdown(self.user)
+
+        self.assertTrue(-1 <= personal_max_drawdown <= 0)
+
+    def test_best_portfolios_by_performance_query(self) -> None:
+        """
+        Test best_portfolios_by_performance query
+        Returns:
+            None
+        """
+        expected_number_of_portfolios = 5
+        self.user.birth_date = datetime.date(
+            (datetime.date.today() - datetime.timedelta(days=18 * 365)).year, 1, 1
+        )
+        self.user.save()
+
+        response = self.query(
+            """
+            query {
+                bestPortfoliosByPerformance {
+                    name,
+                    cagr,
+                    maxDrawdown,
+                }
+            }
+            """
+        )
+
+        self.assertEqual(
+            len(response.json().get("data").get("bestPortfoliosByPerformance")),
+            expected_number_of_portfolios,
+        )

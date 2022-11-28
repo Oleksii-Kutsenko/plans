@@ -1,0 +1,483 @@
+[
+  {
+    "model": "investments.portfolio",
+    "pk": 1,
+    "fields": {
+      "cagr": 0.0376,
+      "market_correlation": -0.3564,
+      "max_drawdown": -0.2265,
+      "name": "10-year Treasury Portfolio",
+      "sharpe": 0.4069,
+      "sortino": 0.5845,
+      "standard_deviation": 0.0673,
+      "visible": true
+    }
+  },
+  {
+    "model": "investments.portfolio",
+    "pk": 2,
+    "fields": {
+      "cagr": 0.0618,
+      "market_correlation": 0.943,
+      "max_drawdown": -0.5384,
+      "name": "Aggressive Global Income Portfolio",
+      "sharpe": 0.3846,
+      "sortino": 0.5295,
+      "standard_deviation": 0.1828,
+      "visible": true
+    }
+  },
+  {
+    "model": "investments.portfolio",
+    "pk": 3,
+    "fields": {
+      "cagr": 0.0691,
+      "market_correlation": 0.9524,
+      "max_drawdown": -0.3031,
+      "name": "Alexander Green Gone Fishin' Portfolio",
+      "sharpe": 0.4993,
+      "sortino": 0.6849,
+      "standard_deviation": 0.1403,
+      "visible": true
+    }
+  },
+  {
+    "model": "investments.portfolio",
+    "pk": 4,
+    "fields": {
+      "cagr": 0.0312,
+      "market_correlation": 0.8119,
+      "max_drawdown": -0.2026,
+      "name": "All Country World 20/80 Portfolio",
+      "sharpe": 0.4161,
+      "sortino": 0.5509,
+      "standard_deviation": 0.0608,
+      "visible": true
+    }
+  },
+  {
+    "model": "investments.portfolio",
+    "pk": 5,
+    "fields": {
+      "cagr": 0.0454,
+      "market_correlation": 0.9304,
+      "max_drawdown": -0.223,
+      "name": "All Country World 40/60 Portfolio",
+      "sharpe": 0.4594,
+      "sortino": 0.6174,
+      "standard_deviation": 0.0892,
+      "visible": true
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 1,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "iShares 7-10 Year Treasury Bond",
+      "symbol": "IEF",
+      "asset_type": "Bonds",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 2,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "Vanguard High Dividend Yield",
+      "symbol": "VYM",
+      "asset_type": "Stocks",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 3,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "SPDR S&P International Dividend ETF",
+      "symbol": "DWX",
+      "asset_type": "Stocks",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 4,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "WisdomTree US SmallCap Dividend ETF",
+      "symbol": "DES",
+      "asset_type": "Stocks",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 5,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "iShares iBoxx $ High Yield Corporate Bond",
+      "symbol": "HYG",
+      "asset_type": "Bonds",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 6,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "iShares Core S&P Small-Cap",
+      "symbol": "IJR",
+      "asset_type": "Stocks",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 7,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "Vanguard Total Stock Market",
+      "symbol": "VTI",
+      "asset_type": "Stocks",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 8,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "iShares MSCI Emerging Markets",
+      "symbol": "EEM",
+      "asset_type": "Stocks",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 9,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "Vanguard FTSE Europe",
+      "symbol": "VGK",
+      "asset_type": "Stocks",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 10,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "Vanguard FTSE Pacific",
+      "symbol": "VPL",
+      "asset_type": "Stocks",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 11,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "Vanguard Real Estate",
+      "symbol": "VNQ",
+      "asset_type": "Real Estate",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 12,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "iShares TIPS Bond",
+      "symbol": "TIP",
+      "asset_type": "Bonds",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 13,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "Vanguard Total Bond Market",
+      "symbol": "BND",
+      "asset_type": "Bonds",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 14,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "Aberdeen Standard Physical Precious Metals Basket Shares",
+      "symbol": "GLTR",
+      "asset_type": "Commodities",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 15,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "Vanguard Total World Stock",
+      "symbol": "VT",
+      "asset_type": "Stocks",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 16,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "Vanguard Total International Bond",
+      "symbol": "BNDX",
+      "asset_type": "Bonds",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.ticker",
+    "pk": 17,
+    "fields": {
+      "expense_ratio": null,
+      "inception_date": null,
+      "name": "iShares JP Morgan USD Em Mkts Bd",
+      "symbol": "EMB",
+      "asset_type": "Bonds",
+      "equivalents": []
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 1,
+    "fields": {
+      "portfolio": 1,
+      "ticker": 1,
+      "weight": "100.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 2,
+    "fields": {
+      "portfolio": 2,
+      "ticker": 2,
+      "weight": "30.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 3,
+    "fields": {
+      "portfolio": 2,
+      "ticker": 3,
+      "weight": "30.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 4,
+    "fields": {
+      "portfolio": 2,
+      "ticker": 4,
+      "weight": "20.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 5,
+    "fields": {
+      "portfolio": 2,
+      "ticker": 5,
+      "weight": "20.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 6,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 6,
+      "weight": "15.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 7,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 7,
+      "weight": "15.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 8,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 8,
+      "weight": "10.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 9,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 9,
+      "weight": "10.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 10,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 10,
+      "weight": "10.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 11,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 11,
+      "weight": "5.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 12,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 12,
+      "weight": "10.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 13,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 13,
+      "weight": "10.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 14,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 5,
+      "weight": "10.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 15,
+    "fields": {
+      "portfolio": 3,
+      "ticker": 14,
+      "weight": "5.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 16,
+    "fields": {
+      "portfolio": 4,
+      "ticker": 15,
+      "weight": "20.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 17,
+    "fields": {
+      "portfolio": 4,
+      "ticker": 13,
+      "weight": "40.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 18,
+    "fields": {
+      "portfolio": 4,
+      "ticker": 16,
+      "weight": "28.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 19,
+    "fields": {
+      "portfolio": 4,
+      "ticker": 17,
+      "weight": "12.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 20,
+    "fields": {
+      "portfolio": 5,
+      "ticker": 15,
+      "weight": "40.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 21,
+    "fields": {
+      "portfolio": 5,
+      "ticker": 13,
+      "weight": "30.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 22,
+    "fields": {
+      "portfolio": 5,
+      "ticker": 16,
+      "weight": "21.00"
+    }
+  },
+  {
+    "model": "investments.portfolioticker",
+    "pk": 23,
+    "fields": {
+      "portfolio": 5,
+      "ticker": 17,
+      "weight": "9.00"
+    }
+  }
+]

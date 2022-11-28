@@ -2,6 +2,8 @@
 Investments admin
 """
 from django.contrib import admin
+from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import QuerySet
 
 from .models import Portfolio, Ticker, PortfolioTicker
 
@@ -10,6 +12,7 @@ class PortfolioTickerInline(admin.TabularInline):
     """
     PortfolioTicker inline for portfolio creation
     """
+
     model = PortfolioTicker
     autocomplete_fields = ("ticker",)
 
@@ -18,12 +21,16 @@ class PortfolioAdmin(admin.ModelAdmin):
     """
     Portfolio admin
     """
-    actions = ["make_csv_files"]
+
+    fields = ("name", "visible")
     list_display = ("name", "get_max_drawdown")
     search_fields = ("name",)
     inlines = [
         PortfolioTickerInline,
     ]
+
+    def get_queryset(self, request: WSGIRequest) -> QuerySet:
+        return Portfolio.base_manager.all()
 
     @admin.display(description="Max Drawdown", ordering="max_drawdown")
     def get_max_drawdown(self, obj: Portfolio) -> str:
@@ -42,6 +49,7 @@ class TickerAdmin(admin.ModelAdmin):
     """
     Ticker admin
     """
+
     list_display = (
         "symbol",
         "asset_type",
@@ -54,6 +62,7 @@ class PortfolioTickerAdmin(admin.ModelAdmin):
     """
     PortfolioTicker admin
     """
+
     autocomplete_fields = ("portfolio", "ticker")
 
 

@@ -2,6 +2,7 @@
 Lazy Portfolio ETFs scraper
 """
 import concurrent.futures
+from typing import Optional
 
 import requests
 from bs4 import BeautifulSoup
@@ -53,7 +54,7 @@ class Command(BaseCommand):
         portfolio_root_soup = BeautifulSoup(response.content, "html.parser")
         portfolio_links = self.get_portfolio_links(portfolio_root_soup)
 
-        limit = options.get("limit", None)
+        limit: Optional[int] = options.get("limit", None)
         portfolio_links = portfolio_links[:limit]
 
         workers = len(portfolio_links) // 10 + 1
@@ -130,7 +131,7 @@ class Command(BaseCommand):
                     weight=weight,
                 )
             )
-        PortfolioTicker.objects.bulk_create(portfolio_tickers)
+        portfolio.create_portfolio_tickets(portfolio_tickers)
 
     @staticmethod
     def get_portfolio_links(portfolio_root_soup: BeautifulSoup) -> list[str]:

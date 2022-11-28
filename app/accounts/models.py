@@ -36,7 +36,7 @@ class User(AbstractUser):
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["email", "birth_date", "country_id"]
 
     objects = UserManager()
 

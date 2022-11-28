@@ -54,8 +54,6 @@ class Command(BaseCommand):
     def handle(self, *args: tuple, **options: dict) -> None:
         current_year = date.today().year
         self.load_economic_freedom_index_data()
-        if CountryEconomicFreedomIndex.objects.count() == 0:
-            self.load_economic_freedom_index_data()
         if CountryEconomicFreedomIndex.objects.filter(year=current_year).count() == 0:
             self.load_latest_economic_freedom_index_data()
         if options.get("dump_data"):
@@ -132,8 +130,8 @@ class Command(BaseCommand):
         country_economic_freedom_index_objects = []
         for _, row in eco_dataframe.iterrows():
             country = Country.objects.get_or_create(
-                iso_code=row["country_iso_code"],
-                name=pycountry.countries.get(alpha_3=row["country_iso_code"]).name,
+                iso_code=row["country__iso_code"],
+                name=pycountry.countries.get(alpha_3=row["country__iso_code"]).name,
             )[0]
             country_economic_freedom_index_objects.append(
                 CountryEconomicFreedomIndex(
@@ -157,7 +155,7 @@ class Command(BaseCommand):
         country_economic_freedom_index_df = pd.DataFrame(
             list(
                 CountryEconomicFreedomIndex.objects.all().values(
-                    "country_iso_code", "country", "score", "year"
+                    "country__iso_code", "country__name", "score", "year"
                 )
             )
         )
