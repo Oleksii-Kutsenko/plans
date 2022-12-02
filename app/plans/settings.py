@@ -34,7 +34,7 @@ INTERNAL_IPS = (
 
 # Application definition
 APPS = ["countries", "investments", "accounts"]
-THIRD_PARTY_APPS = ["graphene_django"]
+THIRD_PARTY_APPS = ["graphene_django", "silk"]
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -54,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "silk.middleware.SilkyMiddleware"
 ]
 
 ROOT_URLCONF = "plans.urls"
