@@ -13,8 +13,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-import debug_toolbar
-from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from graphene_django.views import GraphQLView
@@ -24,7 +22,4 @@ urlpatterns = [
     path("graphql", GraphQLView.as_view(graphiql=True)),
 ]
 
-if settings.DEBUG:
-    urlpatterns = [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ] + urlpatterns
+urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]
