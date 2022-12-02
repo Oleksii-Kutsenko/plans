@@ -23,7 +23,7 @@ class PortfolioAdmin(admin.ModelAdmin):
     """
 
     fields = ("name", "visible")
-    list_display = ("name", "get_max_drawdown")
+    list_display = ("name", "visible", "get_max_drawdown")
     search_fields = ("name",)
     inlines = [
         PortfolioTickerInline,

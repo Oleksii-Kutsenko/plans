@@ -6,7 +6,9 @@ from accounts.tests.factories.pension_system_information import (
     PensionSystemInformationFactory,
 )
 from accounts.tests.factories.user import UserFactory
+from investments.models import Portfolio
 from investments.schema import get_personal_max_drawdown
+from investments.tests.factories.portfolio import PortfolioFactory
 
 
 class SchemaTestCases(GraphQLTestCase):
@@ -77,3 +79,37 @@ class SchemaTestCases(GraphQLTestCase):
             len(response.json().get("data").get("bestPortfoliosByPerformance")),
             expected_number_of_portfolios,
         )
+
+    def test_portfolio_mutation_hide_portfolio(self) -> None:
+        """
+        Test portfolio mutation
+        Returns:
+            None
+        """
+        is_visible = True
+        portfolio = PortfolioFactory(visible=is_visible)
+
+        response = self.query(
+            """
+            mutation updatePortfolio($portfolioId: ID, $visible: Boolean){{
+              updatePortfolio(portfolioId: $portfolioId, visible: $visible) {{
+                portfolio {{
+                  name
+                }}
+              }}
+            }}
+            """,
+            operation_name="updatePortfolio",
+            variables={"portfolioId": portfolio.id, "visible": not is_visible},
+        )
+
+        self.assertEqual(
+            response.json()
+            .get("data")
+            .get("updatePortfolio")
+            .get("portfolio")
+            .get("name"),
+            portfolio.name,
+        )
+        self.assertEqual(Portfolio.objects.filter(name=portfolio.name).count(), 0)
+        self.assertEqual(Portfolio.base_manager.filter(name=portfolio.name).count(), 1)
