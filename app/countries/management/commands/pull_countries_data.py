@@ -39,7 +39,7 @@ class Command(BaseCommand):
     creates CountryEconomicFreedomIndex objects
     """
 
-    OLD_ECONOMIC_FREEDOM_INDEX_DATA = Path(
+    ECONOMIC_FREEDOM_INDEX_DATA = Path(
         "countries/management/commands/data/economic_freedom_index.xlsx"
     )
     ECONOMIC_FREEDOM_INDEX_URL = "https://www.heritage.org/index/ranking"
@@ -58,6 +58,9 @@ class Command(BaseCommand):
             self.load_latest_economic_freedom_index_data()
         if options.get("dump_data"):
             self.dump_economic_freedom_index_data()
+
+    def get_economic_freedom_index_data_path(self) -> Path:
+        return self.ECONOMIC_FREEDOM_INDEX_DATA
 
     def load_latest_economic_freedom_index_data(self) -> None:
         """
@@ -104,7 +107,9 @@ class Command(BaseCommand):
                             score = 0
 
                     if country and score:
-                        country_obj = Country.objects.get(iso_code=country.alpha_3)
+                        country_obj, _ = Country.objects.get_or_create(
+                            iso_code=country.alpha_3, name=country.name
+                        )
                         country_economic_freedom_index_objects.append(
                             CountryEconomicFreedomIndex(
                                 country=country_obj,
@@ -126,7 +131,7 @@ class Command(BaseCommand):
         Returns:
             None
         """
-        eco_dataframe = pd.read_excel(self.OLD_ECONOMIC_FREEDOM_INDEX_DATA)
+        eco_dataframe = pd.read_excel(self.get_economic_freedom_index_data_path())
         country_economic_freedom_index_objects = []
         for _, row in eco_dataframe.iterrows():
             country = Country.objects.get_or_create(
@@ -159,4 +164,6 @@ class Command(BaseCommand):
                 )
             )
         )
-        country_economic_freedom_index_df.to_excel(self.OLD_ECONOMIC_FREEDOM_INDEX_DATA)
+        country_economic_freedom_index_df.to_excel(
+            self.get_economic_freedom_index_data_path()
+        )
