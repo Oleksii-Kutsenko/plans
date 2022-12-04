@@ -1,10 +1,10 @@
+import datetime
 from typing import List, Any
 from unittest.mock import patch, MagicMock
 
 from django.core.management import call_command
 from django.test import TestCase
 
-from investments.models import PortfolioTicker, Portfolio
 from ..factories.portfolio import PortfolioTickerFactory, PortfolioFactory
 
 
@@ -23,6 +23,7 @@ class CalculatePortfoliosMaxDrawdownCommandTests(TestCase):
         backtest.sharpe = 0.4
         backtest.sortino = 0.5
         backtest.correlation = 0.6
+        backtest.start_date = datetime.date(2000, 1, 1)
         mock_backtest.return_value = backtest
         portfolio = PortfolioFactory()
         PortfolioTickerFactory.create_batch(4, portfolio=portfolio, weight=25)
@@ -35,8 +36,4 @@ class CalculatePortfoliosMaxDrawdownCommandTests(TestCase):
         mock_backtest.assert_called_once_with(
             portfolio.get_allocation(), rebalance="no"
         )
-        assert portfolio.max_drawdown == backtest.max_drawdown
-
-    def tearDown(self) -> None:
-        PortfolioTicker.objects.all().delete()
-        Portfolio.objects.all().delete()
+        assert portfolio.backtest_data.max_drawdown == backtest.max_drawdown

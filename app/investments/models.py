@@ -29,15 +29,7 @@ class Portfolio(models.Model):
     base_manager = models.Manager()
     objects = VisiblePortfolioManager()
 
-    cagr = models.FloatField(
-        null=True, help_text=_("Compound annual growth rate"), blank=True
-    )
-    market_correlation = models.FloatField(null=True, blank=True)
-    max_drawdown = models.FloatField(null=True, blank=True)
     name = models.CharField(max_length=100, unique=True)
-    sharpe = models.FloatField(null=True, blank=True)
-    sortino = models.FloatField(null=True, blank=True)
-    standard_deviation = models.FloatField(null=True, blank=True)
     visible = models.BooleanField(default=True)
 
     def __str__(self) -> str:
@@ -63,6 +55,29 @@ class Portfolio(models.Model):
             ticker.ticker.symbol: float(round(ticker.weight / 100, 4))
             for ticker in self.tickers.all()
         }
+
+
+class PortfolioBacktestData(models.Model):
+    """
+    Model that represents portfolio backtest data
+    """
+
+    portfolio = models.OneToOneField(
+        "investments.Portfolio", on_delete=models.CASCADE, related_name="backtest_data"
+    )
+
+    cagr = models.FloatField(
+        null=True, help_text=_("Compound annual growth rate"), blank=True
+    )
+    market_correlation = models.FloatField(null=True, blank=True)
+    max_drawdown = models.FloatField(null=True, blank=True)
+    sharpe = models.FloatField(null=True, blank=True)
+    sortino = models.FloatField(null=True, blank=True)
+    standard_deviation = models.FloatField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.portfolio.name} backtest data"
 
 
 class Ticker(models.Model):

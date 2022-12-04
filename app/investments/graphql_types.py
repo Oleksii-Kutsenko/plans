@@ -3,7 +3,7 @@ GraphQL types from investments models
 """
 from graphene_django import DjangoObjectType
 
-from investments.models import Portfolio
+from investments.models import Portfolio, PortfolioBacktestData
 
 
 class PortfolioType(DjangoObjectType):
@@ -19,11 +19,26 @@ class PortfolioType(DjangoObjectType):
         model = Portfolio
         fields = (
             "name",
-            "cagr",
-            "standard_deviation",
-            "sharpe",
-            "sortino",
-            "market_correlation",
-            "max_drawdown",
             "visible",
+            "backtest_data",
+        )
+
+
+class PortfolioBacktestDataType(DjangoObjectType):
+    """
+    PortfolioBacktestData type
+    """
+
+    class Meta:
+        """
+        Meta
+        """
+
+        model = PortfolioBacktestData
+        fields = (
+            "cagr",
+            "max_drawdown",
+            "sharpe",
+            "standard_deviation",
+            "start_date",
         )

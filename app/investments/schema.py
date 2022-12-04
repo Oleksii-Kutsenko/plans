@@ -11,9 +11,7 @@ from graphql import GraphQLResolveInfo
 
 from accounts.models import User
 from .graphql_types import PortfolioType
-from .models import Portfolio
-
-AGE_OF_MAJORITY = 18
+from .models import Portfolio, PortfolioBacktestData
 
 
 def get_personal_max_drawdown(user: User, age: Optional[int] = None) -> float:
@@ -25,16 +23,21 @@ def get_personal_max_drawdown(user: User, age: Optional[int] = None) -> float:
     Returns:
         Maximum portfolio drawdown
     """
-    min_age = AGE_OF_MAJORITY
+    if PortfolioBacktestData.objects.count() <= 2:
+        raise ValueError("Not enough backtest data for calculation")
+
+    min_age = 1
     max_age = user.get_pension_age()
-    max_drawdown = Portfolio.objects.aggregate(Min("max_drawdown"))["max_drawdown__min"]
-    min_drawdown = Portfolio.objects.aggregate(Max("max_drawdown"))["max_drawdown__max"]
-    result = numpy.polyfit([min_age, max_age], [max_drawdown, min_drawdown], 2)
+    max_drawdown = PortfolioBacktestData.objects.aggregate(Min("max_drawdown"))[
+        "max_drawdown__min"
+    ]
+    min_drawdown = PortfolioBacktestData.objects.aggregate(Max("max_drawdown"))[
+        "max_drawdown__max"
+    ]
+    result = numpy.polyfit([min_age, max_age], [max_drawdown, min_drawdown], 1)
 
     user_age = age if age else user.get_age()
-    personal_max_drawdown = round(
-        result[0] * user_age**2 + result[1] * user_age + result[2], 4
-    )
+    personal_max_drawdown = result[0] * user_age + result[1]
 
     if personal_max_drawdown < max_drawdown:
         personal_max_drawdown = max_drawdown
@@ -71,15 +74,13 @@ class QueryPortfolios(graphene.ObjectType):
         Returns:
             List[PortfolioType]: List of portfolios
         """
-        print(type(self))
-        print(type(info))
         user = info.context.user
         if username:
             user = User.objects.get(username=username)
         personal_max_drawdown = get_personal_max_drawdown(user, age)
         portfolios = Portfolio.objects.filter(
-            max_drawdown__gte=personal_max_drawdown
-        ).order_by("-cagr")[:10]
+            backtest_data__max_drawdown__gte=personal_max_drawdown
+        ).order_by("-backtest_data__cagr").select_related()[:10]
         return portfolios
 
 

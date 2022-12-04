@@ -30,9 +30,9 @@ class PortfolioAdmin(admin.ModelAdmin):
     ]
 
     def get_queryset(self, request: WSGIRequest) -> QuerySet:
-        return Portfolio.base_manager.all()
+        return Portfolio.base_manager.select_related("backtest_data")
 
-    @admin.display(description="Max Drawdown", ordering="max_drawdown")
+    @admin.display(description="Max Drawdown", ordering="backtest_data__max_drawdown")
     def get_max_drawdown(self, obj: Portfolio) -> str:
         """
         Transform max drawdown for portfolio into percentage format
@@ -42,7 +42,11 @@ class PortfolioAdmin(admin.ModelAdmin):
         Returns:
             str: Max drawdown in percentage format
         """
-        return f"{round(obj.max_drawdown * 100, 2)}%" if obj.max_drawdown else "N/A"
+        return (
+            f"{round(obj.backtest_data.max_drawdown * 100, 2)}%"
+            if obj.backtest_data.max_drawdown
+            else "N/A"
+        )
 
 
 class TickerAdmin(admin.ModelAdmin):

@@ -4,7 +4,7 @@ Command that calculates import portfolios parameters
 import testfolio as tfs
 from django.core.management import BaseCommand, CommandParser
 
-from investments.models import Portfolio
+from investments.models import Portfolio, PortfolioBacktestData
 
 
 def is_all_data_available(portfolio: Portfolio) -> bool:
@@ -16,16 +16,15 @@ def is_all_data_available(portfolio: Portfolio) -> bool:
     Returns:
         bool: True if all parameters are available, False otherwise
     """
-    return all(
-        [
-            portfolio.max_drawdown,
-            portfolio.cagr,
-            portfolio.standard_deviation,
-            portfolio.sharpe,
-            portfolio.sortino,
-            portfolio.market_correlation,
-        ]
-    )
+    try:
+        portfolio.backtest_data
+    except PortfolioBacktestData.DoesNotExist:
+        return False
+
+    backtest_data = PortfolioBacktestData.objects.filter(
+        portfolio=portfolio
+    ).values_list()
+    return all(backtest_data[0])
 
 
 class Command(BaseCommand):
@@ -49,10 +48,19 @@ class Command(BaseCommand):
             ):
                 print(f"Calculating portfolio statistics for {portfolio.name}")
                 backtest = tfs.Backtest(portfolio.get_allocation(), rebalance="no")
-                portfolio.max_drawdown = round(backtest.max_drawdown, 4)
-                portfolio.cagr = round(backtest.cagr, 4)
-                portfolio.standard_deviation = round(backtest.std, 4)
-                portfolio.sharpe = round(backtest.sharpe, 4)
-                portfolio.sortino = round(backtest.sortino, 4)
-                portfolio.market_correlation = round(backtest.correlation, 4)
-                portfolio.save()
+
+                backtest_data = PortfolioBacktestData.objects.filter(portfolio=portfolio).first()
+                if backtest_data:
+                    backtest_data.delete()
+
+                backtest_data = PortfolioBacktestData(
+                    portfolio=portfolio,
+                    cagr=backtest.cagr,
+                    market_correlation=backtest.correlation,
+                    max_drawdown=backtest.max_drawdown,
+                    sharpe=backtest.sharpe,
+                    sortino=backtest.sortino,
+                    standard_deviation=backtest.std,
+                    start_date=backtest.start_date,
+                )
+                backtest_data.save()
