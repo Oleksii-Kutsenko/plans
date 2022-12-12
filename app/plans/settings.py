@@ -34,7 +34,7 @@ INTERNAL_IPS = (
 
 # Application definition
 APPS = ["countries", "investments", "accounts"]
-THIRD_PARTY_APPS = ["graphene_django", "silk"]
+THIRD_PARTY_APPS = ["graphene_django", "silk", "rest_framework"]
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -133,7 +133,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-GRAPHENE = {"SCHEMA": "investments.schema.schema"}
 
 AUTH_USER_MODEL = "accounts.User"

@@ -47,7 +47,7 @@ def get_personal_max_drawdown(user: User, age: Optional[int] = None) -> float:
     return personal_max_drawdown
 
 
-class QueryPortfolios(graphene.ObjectType):
+class PortfoliosQuery(graphene.ObjectType):
     """
     Portfolios query
     """
@@ -78,9 +78,13 @@ class QueryPortfolios(graphene.ObjectType):
         if username:
             user = User.objects.get(username=username)
         personal_max_drawdown = get_personal_max_drawdown(user, age)
-        portfolios = Portfolio.objects.filter(
-            backtest_data__max_drawdown__gte=personal_max_drawdown
-        ).order_by("-backtest_data__cagr").select_related()[:10]
+        portfolios = (
+            Portfolio.objects.filter(
+                backtest_data__max_drawdown__gte=personal_max_drawdown
+            )
+            .order_by("-backtest_data__cagr")
+            .select_related()[:10]
+        )
         return portfolios
 
 
@@ -130,6 +134,3 @@ class UpdatePortfolio(graphene.ObjectType):
     """
 
     update_portfolio = PortfolioMutation.Field()
-
-
-schema = graphene.Schema(query=QueryPortfolios, mutation=UpdatePortfolio)
