@@ -5,7 +5,7 @@ import pandas as pd
 from django.core.management import call_command
 from django.test import TestCase
 
-from countries.management.commands.pull_countries_data import Command
+from countries.management.commands.pull_economic_freedom_index_data import Command
 from countries.models import CountryEconomicFreedomIndex, Country
 
 

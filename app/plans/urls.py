@@ -14,12 +14,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path, include
 from graphene_django.views import GraphQLView
 
+from .schema import schema
+
+
+class PrivateGraphQLView(GraphQLView):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/admin/login/?next=/graphql/')
+        return super().dispatch(request, *args, **kwargs)
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("graphql", GraphQLView.as_view(graphiql=True)),
+    path("graphql/", PrivateGraphQLView.as_view(graphiql=True, schema=schema)),
+    path("api/", include("countries.urls")),
 ]
 
-urlpatterns += [path('silk/', include('silk.urls', namespace='silk'))]
+urlpatterns += [path("silk/", include("silk.urls", namespace="silk"))]

@@ -60,6 +60,12 @@ class Command(BaseCommand):
             self.dump_economic_freedom_index_data()
 
     def get_economic_freedom_index_data_path(self) -> Path:
+        """
+        Returns path to the Economic Freedom Index data file
+
+        Returns:
+            Path: Path to the Economic Freedom Index data file
+        """
         return self.ECONOMIC_FREEDOM_INDEX_DATA
 
     def load_latest_economic_freedom_index_data(self) -> None:

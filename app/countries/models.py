@@ -21,14 +21,37 @@ class Country(models.Model):
         return f"{self.name}"
 
 
-class CountryEconomicFreedomIndex(models.Model):
+class BaseIndexData(models.Model):
+    """
+    Base Index Data model
+    """
+
+    country = models.ForeignKey(
+        Country, on_delete=models.CASCADE, related_name="%(class)s"
+    )
+    score = models.FloatField()
+    year = models.IntegerField()
+
+    class Meta:
+        abstract = True
+        constraints = [
+            models.UniqueConstraint(
+                fields=["country", "year"],
+                name="%(app_label)s_%(class)s_unique_country_year",
+            )
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.country} {self.score} {self.year}"
+
+
+class CountryEconomicFreedomIndex(BaseIndexData):
     """
     Country Economic Freedom Index model
     """
 
-    country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True)
-    score = models.FloatField()
-    year = models.IntegerField()
 
-    def __str__(self) -> str:
-        return f"{self.country} {self.score} {self.year}"
+class CountryPayingTaxesIndex(BaseIndexData):
+    """
+    Country Paying Taxes Index model
+    """
