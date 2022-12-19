@@ -34,7 +34,7 @@ INTERNAL_IPS = (
 
 # Application definition
 APPS = ["countries", "investments", "accounts"]
-THIRD_PARTY_APPS = ["graphene_django", "silk", "rest_framework"]
+THIRD_PARTY_APPS = ["silk", "rest_framework"]
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
