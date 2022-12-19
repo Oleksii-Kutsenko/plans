@@ -15,7 +15,7 @@ class PullCountriesDataTestCase(TestCase):
     """
 
     @patch(
-        "countries.management.commands.pull_countries_data.Command.get_economic_freedom_index_data_path",
+        "countries.management.commands.pull_economic_freedom_index_data.Command.get_economic_freedom_index_data_path",
         return_value="/tmp/economic_freedom_index.xlsx",
     )
     def test_pull_existing_countries_data(
@@ -31,7 +31,7 @@ class PullCountriesDataTestCase(TestCase):
 
         args = ["--dump-data"]
         opts: Dict[str, Any] = {}
-        call_command("pull_countries_data", *args, **opts)
+        call_command("pull_economic_freedom_index_data", *args, **opts)
 
         self.assertEqual(CountryEconomicFreedomIndex.objects.count(), len(dataframe))
         dumped_dataframe = pd.read_excel(Command.ECONOMIC_FREEDOM_INDEX_DATA)
@@ -39,7 +39,7 @@ class PullCountriesDataTestCase(TestCase):
         assert dumped_dataframe.equals(dataframe)
 
     @patch(
-        "countries.management.commands.pull_countries_data.Command.load_economic_freedom_index_data",
+        "countries.management.commands.pull_economic_freedom_index_data.Command.load_economic_freedom_index_data",
         return_value=None,
     )
     def test_pull_new_countries_data(self, _: MagicMock) -> None:
@@ -50,7 +50,7 @@ class PullCountriesDataTestCase(TestCase):
         """
         expected_countries_number = 176
         expected_index_data_number = 176
-        call_command("pull_countries_data")
+        call_command("pull_economic_freedom_index_data")
 
         self.assertEqual(Country.objects.count(), expected_countries_number)
         self.assertEqual(

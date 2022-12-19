@@ -5,6 +5,7 @@ import numpy
 from django.db.models import Min, Max
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from accounts.models import User
@@ -46,11 +47,15 @@ def get_personal_max_drawdown(user: User, age: Optional[int] = None) -> float:
 
 
 class PortfolioViewSet(viewsets.ModelViewSet):
+    """
+    Portfolio viewset
+    """
+
     serializer_class = PortfolioSerializer
     queryset = Portfolio.objects.all()
 
     @action(detail=False, methods=["get"])
-    def personal_portfolios_by_performance(self, request):
+    def personal_portfolios_by_performance(self, request: Request) -> Response:
         """
         Return the matched portfolios by maximum drawdown sorted by annualized return
         Args:
@@ -67,10 +72,14 @@ class PortfolioViewSet(viewsets.ModelViewSet):
         portfolios = (
             Portfolio.objects.filter(
                 backtest_data__max_drawdown__gte=personal_max_drawdown,
-                backtest_data__start_date__lte=date(date.today().year - 15, date.today().month, date.today().day),
+                backtest_data__start_date__lte=date(
+                    date.today().year - 15, date.today().month, date.today().day
+                ),
             )
             .order_by("-backtest_data__cagr")
             .select_related()[:10]
         )
         portfolios = self.get_serializer(portfolios, many=True).data
-        return Response({"personal_max_drawdown": personal_max_drawdown, "portfolios": portfolios})
+        return Response(
+            {"personal_max_drawdown": personal_max_drawdown, "portfolios": portfolios}
+        )
