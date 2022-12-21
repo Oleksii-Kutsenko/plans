@@ -55,3 +55,9 @@ class CountryPayingTaxesIndex(BaseIndexData):
     """
     Country Paying Taxes Index model
     """
+
+
+class CountrySuicideRate(BaseIndexData):
+    """
+    Country Suicide Rate model
+    """
