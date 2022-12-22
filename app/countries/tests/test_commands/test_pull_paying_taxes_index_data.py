@@ -10,7 +10,12 @@ from countries.models import CountryPayingTaxesIndex
 
 
 class PullPayingTaxesIndexDataTest(TestCase):
-    def test_command_output(self):
+    def test_pull_paying_taxes_index_data_command(self) -> None:
+        """
+        Test pull_paying_taxes_index_data command
+        Returns:
+            None
+        """
         taxes_dataframe = pd.read_excel(Command.PAYING_TAXES_INDEX_DATA_PATH)
         expected_index_data_number = 0
         for _, row in taxes_dataframe.iterrows():
@@ -23,7 +28,7 @@ class PullPayingTaxesIndexDataTest(TestCase):
                 if country_name == "Kosovo":
                     # Skip unrecognized territory
                     continue
-                search_results = pycountry.countries.search_fuzzy(country_name)
+                pycountry.countries.search_fuzzy(country_name)
                 expected_index_data_number += 1
             except LookupError:
                 continue
