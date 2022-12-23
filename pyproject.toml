@@ -1,0 +1,23 @@
+[tool.black]
+exclude = """
+(
+    /(
+        \.direnv
+        | \.eggs
+        | \.git
+        | \.hg
+        | \.mypy_cache
+        | \.nox
+        | \.tox
+        | \.venv
+        | venv
+        | \.svn
+        | \.ipynb_checkpoints
+        | _build
+        | buck-out
+        | build
+        | dist
+        | __pypackages__
+        )/
+)
+"""

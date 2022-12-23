@@ -5,7 +5,8 @@ import pandas as pd
 import pycountry
 from django.core.management.base import BaseCommand
 
-from countries.management.commands.counties_mapping import ProblematicCountriesSolver
+from countries.management.commands.counties_mapping import ProblematicCountriesSolver, \
+    territories_regions_unrecognized_countries
 from countries.models import CountryPayingTaxesIndex, Country
 
 
@@ -32,24 +33,21 @@ class Command(BaseCommand):
 
             country_name = ProblematicCountriesSolver.get_country_name(row["Location"])
 
-            if country_name == "Kosovo":
-                # Skip unrecognized territory
+            if country_name in territories_regions_unrecognized_countries or " - " in country_name:
+                # Skip unrecognized countries, territories and regions
                 continue
 
-            try:
-                search_results = pycountry.countries.search_fuzzy(country_name)
-                country, _ = Country.objects.get_or_create(
-                    iso_code=search_results[0].alpha_3, name=search_results[0].name
-                )
+            search_results = pycountry.countries.search_fuzzy(country_name)
+            country, _ = Country.objects.get_or_create(
+                iso_code=search_results[0].alpha_3, name=search_results[0].name
+            )
 
-                country_paying_taxes_index_objects.append(
-                    CountryPayingTaxesIndex(
-                        country_id=country.id,
-                        score=row["Paying Taxes score"],
-                        year=self.PAYING_TAXES_INDEX_DATA_YEAR,
-                    )
+            country_paying_taxes_index_objects.append(
+                CountryPayingTaxesIndex(
+                    country_id=country.id,
+                    value=row["Paying Taxes score"],
+                    year=self.PAYING_TAXES_INDEX_DATA_YEAR,
                 )
-            except LookupError as error:
-                print(f"Country {row['Location']} not found. Reason: {error}")
+            )
 
         CountryPayingTaxesIndex.objects.bulk_create(country_paying_taxes_index_objects)

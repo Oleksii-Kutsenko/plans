@@ -6,8 +6,6 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    replaces = [('countries', '0005_countryreservecurrency'), ('countries', '0006_alter_reservecurrency_year')]
-
     dependencies = [
         ('countries', '0004_countrysuiciderate_and_more'),
     ]

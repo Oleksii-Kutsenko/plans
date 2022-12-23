@@ -119,7 +119,7 @@ class Command(BaseCommand):
                         country_economic_freedom_index_objects.append(
                             CountryEconomicFreedomIndex(
                                 country=country_obj,
-                                score=score,
+                                value=score,
                                 year=data_year,
                             )
                         )
@@ -147,7 +147,7 @@ class Command(BaseCommand):
             country_economic_freedom_index_objects.append(
                 CountryEconomicFreedomIndex(
                     country=country,
-                    score=row["score"],
+                    value=row["score"],
                     year=row["year"],
                 )
             )
@@ -166,7 +166,7 @@ class Command(BaseCommand):
         country_economic_freedom_index_df = pd.DataFrame(
             list(
                 CountryEconomicFreedomIndex.objects.all().values(
-                    "country__iso_code", "country__name", "score", "year"
+                    "country__iso_code", "country__name", "value", "year"
                 )
             )
         )
