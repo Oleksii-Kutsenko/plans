@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from .models import User
 
 
-class UserManager(BaseUserManager):
+class UserManager(BaseUserManager["User"]):
     """
     Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.

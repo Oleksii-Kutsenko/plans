@@ -1,5 +1,6 @@
 from datetime import date
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 import pycountry
@@ -20,7 +21,7 @@ class Command(BaseCommand):
     GDP_DATA_PATH = Path("countries/management/commands/data/gdp.xls")
     COUNTRY_NAMES_COLUMN = "GDP, current prices (Billions of U.S. dollars)"
 
-    def handle(self, *args, **options) -> None:
+    def handle(self, *args: Any, **options: Any) -> None:
         """
         Pull countries GDP data
         Args:
@@ -33,16 +34,13 @@ class Command(BaseCommand):
 
         current_year = date.today().year
 
-        gdp_dataframe = gdp_dataframe[[self.COUNTRY_NAMES_COLUMN, current_year]]
+        gdp_dataframe = gdp_dataframe[[self.COUNTRY_NAMES_COLUMN, current_year]]  # type: ignore
         gdp_dataframe.dropna(inplace=True)
 
         CountryGDP.objects.all().delete()
         for _, row in gdp_dataframe.iterrows():
             raw_country_name = row[self.COUNTRY_NAMES_COLUMN].strip()
-            if (
-                pd.isna(row[current_year])
-                or row[current_year] == "no data"
-            ):
+            if pd.isna(row[current_year]) or row[current_year] == "no data":
                 continue
 
             if raw_country_name in territories_regions_unrecognized_countries:

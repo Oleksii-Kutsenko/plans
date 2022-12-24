@@ -42,7 +42,7 @@ fail-under=10
 #from-stdin=
 
 # Files or directories to be skipped. They should be base names, not paths.
-ignore=migrations
+ignore=migrations,manage.py
 
 # Add files or directories matching the regular expressions patterns to the
 # ignore-list. The regex matches against paths and can be in Posix or Windows
@@ -63,7 +63,7 @@ ignored-modules=
 
 # Python code to execute, usually for sys.path manipulation such as
 # pygtk.require().
-#init-hook=
+init-hook='import sys; sys.path.append("./app")'
 
 # Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
 # number of processors available to use, and will cap the count on Windows to
@@ -77,7 +77,7 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=
+load-plugins=pylint_django
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -153,7 +153,8 @@ disable=raw-checker-failed,
         suppressed-message,
         useless-suppression,
         deprecated-pragma,
-        use-symbolic-message-instead
+        use-symbolic-message-instead,
+        missing-module-docstring,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -350,7 +351,7 @@ max-branches=12
 max-locals=15
 
 # Maximum number of parents for a class (see R0901).
-max-parents=7
+max-parents=17
 
 # Maximum number of public methods for a class (see R0904).
 max-public-methods=20
@@ -616,3 +617,5 @@ init-import=no
 # List of qualified module names which can have objects that can redefine
 # builtins.
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+
+django-settings-module=app.plans.settings

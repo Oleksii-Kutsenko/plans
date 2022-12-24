@@ -24,14 +24,11 @@ class PullCountriesGDPTestCase(TestCase):
 
         current_year = date.today().year
 
-        gdp_dataframe = gdp_dataframe[[Command.COUNTRY_NAMES_COLUMN, current_year]]
+        gdp_dataframe = gdp_dataframe[[Command.COUNTRY_NAMES_COLUMN, current_year]]  # type: ignore
         gdp_dataframe.dropna(inplace=True)
         for _, row in gdp_dataframe.iterrows():
             raw_country_name = row[Command.COUNTRY_NAMES_COLUMN].strip()
-            if (
-                pd.isna(row[current_year])
-                or row[current_year] == "no data"
-            ):
+            if pd.isna(row[current_year]) or row[current_year] == "no data":
                 continue
 
             if raw_country_name in territories_regions_unrecognized_countries:

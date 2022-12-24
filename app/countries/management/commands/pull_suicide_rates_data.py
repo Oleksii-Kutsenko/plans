@@ -38,7 +38,7 @@ class Command(BaseCommand):
                 country_suicide_rate_objects.append(
                     CountrySuicideRate(
                         country_id=country.id,
-                        score=row[1],
+                        value=row[1],
                         year=self.SUICIDE_RATES_DATA_YEAR,
                     )
                 )

@@ -2,7 +2,7 @@
 Command that calculates import portfolios parameters
 """
 import testfolio as tfs
-from django.core.management import BaseCommand, CommandParser
+from django.core.management.base import BaseCommand, CommandParser
 
 from investments.models import Portfolio, PortfolioBacktestData
 
@@ -49,7 +49,9 @@ class Command(BaseCommand):
                 print(f"Calculating portfolio statistics for {portfolio.name}")
                 backtest = tfs.Backtest(portfolio.get_allocation(), rebalance="no")
 
-                backtest_data = PortfolioBacktestData.objects.filter(portfolio=portfolio).first()
+                backtest_data = PortfolioBacktestData.objects.filter(
+                    portfolio=portfolio
+                ).first()
                 if backtest_data:
                     backtest_data.delete()
 

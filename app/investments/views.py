@@ -27,6 +27,8 @@ def get_personal_max_drawdown(user: User, age: Optional[int] = None) -> float:
 
     min_age = 1
     max_age = user.get_pension_age()
+    if max_age is None:
+        raise ValueError("User has no pension age")
     max_drawdown = PortfolioBacktestData.objects.aggregate(Min("max_drawdown"))[
         "max_drawdown__min"
     ]
@@ -36,7 +38,7 @@ def get_personal_max_drawdown(user: User, age: Optional[int] = None) -> float:
     result = numpy.polyfit([min_age, max_age], [max_drawdown, min_drawdown], 1)
 
     user_age = age if age else user.get_age()
-    personal_max_drawdown = result[0] * user_age + result[1]
+    personal_max_drawdown: float = result[0] * user_age + result[1]
 
     if personal_max_drawdown < max_drawdown:
         personal_max_drawdown = max_drawdown

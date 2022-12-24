@@ -111,7 +111,7 @@ class CountryRatingCalculator:
                 )
         return components_values_list
 
-    def query_data(self) -> QuerySet:
+    def query_data(self) -> QuerySet[Country]:
         """
         Returns queryset with countries rating components scores
         Returns:

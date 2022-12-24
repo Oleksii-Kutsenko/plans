@@ -27,6 +27,7 @@ class PortfolioSerializer(serializers.ModelSerializer):
     """
     Portfolio serializer
     """
+
     backtest_data = PortfolioBacktestDataSerializer()
 
     class Meta:

@@ -1,2 +1,2 @@
-django-debug-toolbar==3.7.0
+prospector[with_mypy,with_bandit]==1.8.3
 -r requirements-tests.txt

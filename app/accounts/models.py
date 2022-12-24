@@ -2,6 +2,7 @@
 Accounts models
 """
 import datetime
+from typing import Optional
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
@@ -38,7 +39,7 @@ class User(AbstractUser):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email", "birth_date", "country_id"]
 
-    objects = UserManager()
+    objects = UserManager()  # type: ignore
 
     def __str__(self) -> str:
         return f"{self.email}"
@@ -51,29 +52,33 @@ class User(AbstractUser):
         """
         return (datetime.date.today() - self.birth_date).days // 365
 
-    def get_life_expectancy(self) -> int:
+    def get_life_expectancy(self) -> Optional[int]:
         """
         Get user life expectancy
         Returns:
             int: user life expectancy
         """
-        assert self.gender
-        return getattr(
-            self.country.pension_system_information,
-            f"{self.gender.lower()}_life_expectancy",
-        )
+        if self.gender:
+            return getattr(
+                self.country.pension_system_information,
+                f"{self.gender.lower()}_life_expectancy",
+                None,
+            )
+        return None
 
-    def get_pension_age(self) -> int:
+    def get_pension_age(self) -> Optional[int]:
         """
         Get user pension age
         Returns:
             int: user pension age
         """
-        assert self.gender
-        return getattr(
-            self.country.pension_system_information,
-            f"{self.gender.lower()}_pension_age",
-        )
+        if self.gender:
+            return getattr(
+                self.country.pension_system_information,
+                f"{self.gender.lower()}_pension_age",
+                None,
+            )
+        return None
 
 
 class PensionSystemInformation(models.Model):

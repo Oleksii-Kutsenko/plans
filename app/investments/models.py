@@ -43,7 +43,8 @@ class Portfolio(models.Model):
         Returns:
             Created portfolio
         """
-        assert sum(ticker.weight for ticker in portfolio_tickets) == 100
+        if sum(ticket.weight for ticket in portfolio_tickets) != 100:
+            raise ValueError(_("Sum of weights must be 100"))
         PortfolioTicker.objects.bulk_create(portfolio_tickets)
         return self
 
