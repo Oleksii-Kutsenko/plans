@@ -4,11 +4,12 @@ Command to pull countries data from the web page or load old data from the file
 from datetime import date
 from enum import Enum
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
+import pycountry
 import requests
 from bs4 import BeautifulSoup
-import pycountry
 from django.core.management.base import BaseCommand, CommandParser
 
 from ...models import CountryEconomicFreedomIndex, Country
@@ -51,7 +52,7 @@ class Command(BaseCommand):
             action="store_true",
         )
 
-    def handle(self, *args: tuple, **options: dict) -> None:
+    def handle(self, *args: tuple[Any], **options: dict[str, Any]) -> None:
         current_year = date.today().year
         self.load_economic_freedom_index_data()
         if CountryEconomicFreedomIndex.objects.filter(year=current_year).count() == 0:
@@ -119,7 +120,7 @@ class Command(BaseCommand):
                         country_economic_freedom_index_objects.append(
                             CountryEconomicFreedomIndex(
                                 country=country_obj,
-                                score=score,
+                                value=score,
                                 year=data_year,
                             )
                         )
@@ -147,7 +148,7 @@ class Command(BaseCommand):
             country_economic_freedom_index_objects.append(
                 CountryEconomicFreedomIndex(
                     country=country,
-                    score=row["score"],
+                    value=row["score"],
                     year=row["year"],
                 )
             )
@@ -166,7 +167,7 @@ class Command(BaseCommand):
         country_economic_freedom_index_df = pd.DataFrame(
             list(
                 CountryEconomicFreedomIndex.objects.all().values(
-                    "country__iso_code", "country__name", "score", "year"
+                    "country__iso_code", "country__name", "value", "year"
                 )
             )
         )

@@ -2,8 +2,8 @@
 Investments admin
 """
 from django.contrib import admin
-from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import QuerySet
+from django.http import HttpRequest
 
 from .models import Portfolio, Ticker, PortfolioTicker
 
@@ -29,7 +29,7 @@ class PortfolioAdmin(admin.ModelAdmin):
         PortfolioTickerInline,
     ]
 
-    def get_queryset(self, request: WSGIRequest) -> QuerySet:
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
         return Portfolio.base_manager.select_related("backtest_data")
 
     @admin.display(description="Max Drawdown", ordering="backtest_data__max_drawdown")

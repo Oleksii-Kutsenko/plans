@@ -9,12 +9,16 @@ from ..factories.portfolio import PortfolioTickerFactory, PortfolioFactory
 
 
 class CalculatePortfoliosMaxDrawdownCommandTests(TestCase):
+    """
+    TestCases for portfolio statistics calculation
+    """
+
     @patch(
         "investments.management.commands.calculate_portfolios_statistics.tfs.Backtest"
     )
     def test_calculate_portfolios_max_drawdown(self, mock_backtest: MagicMock) -> None:
         """
-        Test that the max drawdown is calculated correctly
+        Test that the portfolios statistics are collected correctly
         """
         backtest = MagicMock()
         backtest.max_drawdown = -0.1
@@ -36,4 +40,4 @@ class CalculatePortfoliosMaxDrawdownCommandTests(TestCase):
         mock_backtest.assert_called_once_with(
             portfolio.get_allocation(), rebalance="no"
         )
-        assert portfolio.backtest_data.max_drawdown == backtest.max_drawdown
+        self.assertEqual(portfolio.backtest_data.max_drawdown, backtest.max_drawdown)

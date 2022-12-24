@@ -31,7 +31,7 @@ class Country(models.Model):
         return f"{self.name}"
 
 
-class BaseIndexData(models.Model):
+class BaseCountryRatingComponent(models.Model):
     """
     Base Index Data model
     """
@@ -39,7 +39,7 @@ class BaseIndexData(models.Model):
     country = models.ForeignKey(
         Country, on_delete=models.CASCADE, related_name="%(class)s"
     )
-    score = models.FloatField()
+    value = models.FloatField()
     year = models.IntegerField()
 
     class Meta:
@@ -52,22 +52,22 @@ class BaseIndexData(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"{self.country} {self.score} {self.year}"
+        return f"{self.country} {self.value} {self.year}"
 
 
-class CountryEconomicFreedomIndex(BaseIndexData):
+class CountryEconomicFreedomIndex(BaseCountryRatingComponent):
     """
     Country Economic Freedom Index model
     """
 
 
-class CountryPayingTaxesIndex(BaseIndexData):
+class CountryPayingTaxesIndex(BaseCountryRatingComponent):
     """
     Country Paying Taxes Index model
     """
 
 
-class CountrySuicideRate(BaseIndexData):
+class CountrySuicideRate(BaseCountryRatingComponent):
     """
     Country Suicide Rate model
     """
@@ -97,3 +97,9 @@ class CountryReserveCurrency(models.Model):
         Country, on_delete=models.PROTECT, related_name="reserve_currency"
     )
     reserve_currency = models.ForeignKey(ReserveCurrency, on_delete=models.PROTECT)
+
+
+class CountryGDP(BaseCountryRatingComponent):
+    """
+    Country GDP
+    """

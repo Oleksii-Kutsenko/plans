@@ -9,6 +9,7 @@ from countries.models import (
     Country,
     CountryReserveCurrency,
     ReserveCurrency,
+    CountryGDP,
 )
 
 
@@ -43,6 +44,7 @@ class CountryRatingCalculator:
                 "model": ReserveCurrency,
             },
         },
+        "gdp": {"orm_key": "countrygdp", "model": CountryGDP, "inverted": False},
     }
 
     def __init__(self) -> None:
@@ -102,14 +104,14 @@ class CountryRatingCalculator:
                 )
             else:
                 components_values_list.append(
-                    f"{component_setting.get('orm_key')}__score"
+                    f"{component_setting.get('orm_key')}__value"
                 )
                 components_values_list.append(
                     f"{component_setting.get('orm_key')}__year"
                 )
         return components_values_list
 
-    def query_data(self) -> QuerySet:
+    def query_data(self) -> QuerySet[Country]:
         """
         Returns queryset with countries rating components scores
         Returns:
@@ -136,7 +138,7 @@ class CountryRatingCalculator:
         """
         dataframe_columns = ["name"]
         for component_name in self.rating_component:
-            dataframe_columns.append(f"{component_name}_score")
+            dataframe_columns.append(f"{component_name}_value")
             dataframe_columns.append(f"{component_name}_year")
         return dataframe_columns
 
@@ -155,26 +157,26 @@ class CountryRatingCalculator:
             f"{component_name}_normalized" for component_name in self.rating_component
         ]
         for component_name, component_settings in self.rating_component.items():
-            max_value = dataframe[f"{component_name}_score"].max()
-            min_value = dataframe[f"{component_name}_score"].min()
+            max_value = dataframe[f"{component_name}_value"].max()
+            min_value = dataframe[f"{component_name}_value"].min()
 
             if component_settings.get("inverted"):
                 dataframe[f"{component_name}_normalized"] = (
                     100
-                    - (dataframe[f"{component_name}_score"] - min_value)
+                    - (dataframe[f"{component_name}_value"] - min_value)
                     / (max_value - min_value)
                     * 100
                 )
             else:
                 dataframe[f"{component_name}_normalized"] = (
-                    (dataframe[f"{component_name}_score"] - min_value)
+                    (dataframe[f"{component_name}_value"] - min_value)
                     / (max_value - min_value)
                     * 100
                 )
 
-            dataframe[f"{component_name}_score"].fillna("N/A", inplace=True)
+            dataframe[f"{component_name}_value"].fillna("N/A", inplace=True)
             dataframe[f"{component_name}_year"].fillna("N/A", inplace=True)
-            dataframe[f"{component_name}_normalized"].fillna(-1, inplace=True)
+            dataframe[f"{component_name}_normalized"].fillna(-100, inplace=True)
 
         dataframe["rating"] = dataframe[normalized_columns].mean(axis=1)
         dataframe.sort_values(by="rating", ascending=False, inplace=True)

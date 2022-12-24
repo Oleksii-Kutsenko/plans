@@ -1,0 +1,70 @@
+[tool.black]
+exclude = """
+(
+    /(
+          \\.direnv
+        | \\.eggs
+        | \\.git
+        | \\.hg
+        | \\.mypy_cache
+        | \\.nox
+        | \\.tox
+        | \\.venv
+        | venv
+        | \\.svn
+        | \\.ipynb_checkpoints
+        | _build
+        | buck-out
+        | build
+        | dist
+        | __pypackages__
+        | migrations
+    )/
+)
+"""
+
+[tool.vulture]
+exclude = ["*\\migrations\\*", "*\\wsgi.py", "*\\asgi.py", "*\\settings.py", "*\\urls.py"]
+min_confidence = 61
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+
+[tool.mypy]
+python_version = "3.10"
+
+explicit_package_bases = true
+mypy_path = "$MYPY_CONFIG_FILE_DIR/app"
+exclude = [
+    "tests",
+    "manage.py",
+]
+
+
+ignore_missing_imports = true
+
+# Ensure full coverage
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+
+# Restrict dynamic typing
+warn_return_any = true
+
+# Know exactly what you're doing
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unused_configs = true
+warn_unreachable = true
+show_error_codes = true
+
+# Explicit is better than implicit
+no_implicit_optional = true
+
+# Plugins
+plugins = "mypy_django_plugin.main"
+
+
+[tool.django-stubs]
+django_settings_module = "plans.settings"

@@ -12,4 +12,8 @@ class PensionSystemInformationFactory(factory.DjangoModelFactory):
     female_pension_age = factory.fuzzy.FuzzyFloat(55, 70)
 
     class Meta:
+        """
+        Meta
+        """
+
         model = PensionSystemInformation

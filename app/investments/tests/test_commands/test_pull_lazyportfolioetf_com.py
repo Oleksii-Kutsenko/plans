@@ -1,3 +1,6 @@
+"""
+Tests for the pull_lazyportfolioetf_com command
+"""
 from unittest.mock import patch, MagicMock
 
 import requests

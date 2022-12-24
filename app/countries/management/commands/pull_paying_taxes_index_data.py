@@ -5,7 +5,10 @@ import pandas as pd
 import pycountry
 from django.core.management.base import BaseCommand
 
-from countries.management.commands.counties_mapping import ProblematicCountriesSolver
+from countries.management.commands.counties_mapping import (
+    ProblematicCountriesSolver,
+    territories_regions_unrecognized_countries,
+)
 from countries.models import CountryPayingTaxesIndex, Country
 
 
@@ -21,35 +24,38 @@ class Command(BaseCommand):
     help = "Pull countries information from data sources"
 
     def handle(self, *args: Any, **options: Any) -> None:
-        taxes_dataframe = pd.read_excel(self.PAYING_TAXES_INDEX_DATA_PATH)
+        taxes_dataframe = self.process_taxes_dataframe(
+            self.PAYING_TAXES_INDEX_DATA_PATH
+        )
 
         CountryPayingTaxesIndex.objects.all().delete()
         country_paying_taxes_index_objects = []
         for _, row in taxes_dataframe.iterrows():
-            # skip headers
-            if row["Unnamed: 0"] == "Region" or row["Unnamed: 0"] == "Location":
-                continue
-
             country_name = ProblematicCountriesSolver.get_country_name(row["Location"])
+            search_results = pycountry.countries.search_fuzzy(country_name)
 
-            if country_name == "Kosovo":
-                # Skip unrecognized territory
-                continue
+            country, _ = Country.objects.get_or_create(
+                iso_code=search_results[0].alpha_3, name=search_results[0].name
+            )
 
-            try:
-                search_results = pycountry.countries.search_fuzzy(country_name)
-                country, _ = Country.objects.get_or_create(
-                    iso_code=search_results[0].alpha_3, name=search_results[0].name
+            country_paying_taxes_index_objects.append(
+                CountryPayingTaxesIndex(
+                    country_id=country.id,
+                    value=row["Paying Taxes score"],
+                    year=self.PAYING_TAXES_INDEX_DATA_YEAR,
                 )
-
-                country_paying_taxes_index_objects.append(
-                    CountryPayingTaxesIndex(
-                        country_id=country.id,
-                        score=row["Paying Taxes score"],
-                        year=self.PAYING_TAXES_INDEX_DATA_YEAR,
-                    )
-                )
-            except LookupError as error:
-                print(f"Country {row['Location']} not found. Reason: {error}")
+            )
 
         CountryPayingTaxesIndex.objects.bulk_create(country_paying_taxes_index_objects)
+
+    @staticmethod
+    def process_taxes_dataframe(paying_taxes_index_data_path: Path) -> pd.DataFrame:
+        taxes_dataframe = pd.read_excel(paying_taxes_index_data_path)
+        taxes_dataframe = taxes_dataframe.query(
+            "`Unnamed: 0` not in ('Location', 'Region')"
+        )
+        taxes_dataframe = taxes_dataframe.query(
+            '~Location.str.contains(" - ") and '
+            "Location not in @territories_regions_unrecognized_countries"
+        )
+        return taxes_dataframe
