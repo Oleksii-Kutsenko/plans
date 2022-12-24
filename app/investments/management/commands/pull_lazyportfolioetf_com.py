@@ -2,11 +2,11 @@
 Lazy Portfolio ETFs scraper
 """
 import concurrent.futures
-from typing import Optional
+from typing import Optional, Any
 
 import requests
 from bs4 import BeautifulSoup
-from django.core.management import BaseCommand, CommandParser
+from django.core.management.base import BaseCommand, CommandParser
 
 from investments.models import Ticker, Portfolio, PortfolioTicker
 
@@ -49,7 +49,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("--limit", nargs="?", type=int)
 
-    def handle(self, *args: tuple, **options: dict) -> None:
+    def handle(self, *args: tuple, **options: Any) -> None:
         response = requests.get(self.LAZY_PORTFOLIO_ROOT, timeout=60)
         portfolio_root_soup = BeautifulSoup(response.content, "html.parser")
         portfolio_links = self.get_portfolio_links(portfolio_root_soup)
@@ -83,11 +83,12 @@ class Command(BaseCommand):
             None
         """
         portfolio_soup = BeautifulSoup(content, "html.parser")
-        portfolio_name = (
-            portfolio_soup.find("h1", class_="title entry-title")
-            .text.split(":")[0]
-            .strip()
-        )
+
+        title = portfolio_soup.find("h1", class_="title entry-title")
+        if title is None:
+            raise Exception("Portfolio title not found")
+
+        portfolio_name = title.text.split(":")[0].strip()
         lazy_portfolio, created = Portfolio.objects.get_or_create(name=portfolio_name)
         if created:
             print(f"New portfolio {lazy_portfolio} has been created")

@@ -20,17 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-@3z@0k6)^&samrh2e*n^fv9af40lg^2b+h$&**io(4yu-5g0$%"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1"]
-INTERNAL_IPS = (
-    "127.0.0.1",
-    "0.0.0.0",
-    "localhost",
-)
 
 # Application definition
 APPS = ["countries", "investments", "accounts"]
@@ -54,7 +49,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "silk.middleware.SilkyMiddleware"
+    "silk.middleware.SilkyMiddleware",
 ]
 
 ROOT_URLCONF = "plans.urls"

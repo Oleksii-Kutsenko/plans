@@ -15,7 +15,8 @@ class PullEconomicFreedomIndexDataTestCase(TestCase):
     """
 
     @patch(
-        "countries.management.commands.pull_economic_freedom_index_data.Command.get_economic_freedom_index_data_path",
+        "countries.management.commands.pull_economic_freedom_index_data."
+        "Command.get_economic_freedom_index_data_path",
         return_value="/tmp/economic_freedom_index.xlsx",
     )
     def test_pull_existing_countries_data(
@@ -39,7 +40,8 @@ class PullEconomicFreedomIndexDataTestCase(TestCase):
         assert dumped_dataframe.equals(dataframe)
 
     @patch(
-        "countries.management.commands.pull_economic_freedom_index_data.Command.load_economic_freedom_index_data",
+        "countries.management.commands.pull_economic_freedom_index_data."
+        "Command.load_economic_freedom_index_data",
         return_value=None,
     )
     def test_pull_new_countries_data(self, _: MagicMock) -> None:

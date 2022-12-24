@@ -31,7 +31,7 @@ class Country(models.Model):
         return f"{self.name}"
 
 
-class BaseIndexData(models.Model):
+class BaseCountryRatingComponent(models.Model):
     """
     Base Index Data model
     """
@@ -39,7 +39,7 @@ class BaseIndexData(models.Model):
     country = models.ForeignKey(
         Country, on_delete=models.CASCADE, related_name="%(class)s"
     )
-    score = models.FloatField()
+    value = models.FloatField()
     year = models.IntegerField()
 
     class Meta:
@@ -52,22 +52,31 @@ class BaseIndexData(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"{self.country} {self.score} {self.year}"
+        return f"{self.country} {self.value} {self.year}"
+
+    @classmethod
+    def get_latest_available_data_year(cls) -> int:
+        """
+        Returns the latest available year for rating component data
+        Returns:
+            int: latest available year for rating component data
+        """
+        return cls.objects.latest("year").year
 
 
-class CountryEconomicFreedomIndex(BaseIndexData):
+class CountryEconomicFreedomIndex(BaseCountryRatingComponent):
     """
     Country Economic Freedom Index model
     """
 
 
-class CountryPayingTaxesIndex(BaseIndexData):
+class CountryPayingTaxesIndex(BaseCountryRatingComponent):
     """
     Country Paying Taxes Index model
     """
 
 
-class CountrySuicideRate(BaseIndexData):
+class CountrySuicideRate(BaseCountryRatingComponent):
     """
     Country Suicide Rate model
     """
@@ -97,3 +106,18 @@ class CountryReserveCurrency(models.Model):
         Country, on_delete=models.PROTECT, related_name="reserve_currency"
     )
     reserve_currency = models.ForeignKey(ReserveCurrency, on_delete=models.PROTECT)
+
+    @staticmethod
+    def get_latest_available_data_year() -> int:
+        """
+        Returns latest available data year
+        Returns:
+            int: year
+        """
+        return ReserveCurrency.objects.latest("year").year
+
+
+class CountryGDP(BaseCountryRatingComponent):
+    """
+    Country GDP
+    """

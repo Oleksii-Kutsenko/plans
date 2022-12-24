@@ -112,10 +112,10 @@ class Command(BaseCommand):
             )
             for country in countries:
                 search_result = pycountry.countries.get(alpha_3=country)
-                country, _ = Country.objects.get_or_create(
+                country_obj, _ = Country.objects.get_or_create(
                     iso_code=search_result.alpha_3, name=search_result.name
                 )
                 CountryReserveCurrency.objects.create(
-                    country=country,
+                    country=country_obj,
                     reserve_currency=currency,
                 )
