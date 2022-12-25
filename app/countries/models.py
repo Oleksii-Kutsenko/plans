@@ -54,6 +54,15 @@ class BaseCountryRatingComponent(models.Model):
     def __str__(self) -> str:
         return f"{self.country} {self.value} {self.year}"
 
+    @classmethod
+    def get_latest_available_data_year(cls) -> int:
+        """
+        Returns the latest available year for rating component data
+        Returns:
+            int: latest available year for rating component data
+        """
+        return cls.objects.latest("year").year
+
 
 class CountryEconomicFreedomIndex(BaseCountryRatingComponent):
     """
@@ -97,6 +106,15 @@ class CountryReserveCurrency(models.Model):
         Country, on_delete=models.PROTECT, related_name="reserve_currency"
     )
     reserve_currency = models.ForeignKey(ReserveCurrency, on_delete=models.PROTECT)
+
+    @staticmethod
+    def get_latest_available_data_year() -> int:
+        """
+        Returns latest available data year
+        Returns:
+            int: year
+        """
+        return ReserveCurrency.objects.latest("year").year
 
 
 class CountryGDP(BaseCountryRatingComponent):

@@ -18,7 +18,7 @@ class PullCountriesGDPTestCase(TestCase):
         None
     """
 
-    def test_command_output(self) -> None:
+    def test_pull_countries_gdp_command(self) -> None:
         expected_country_gdp_objects_number = 0
         gdp_dataframe = pd.read_excel(Command.GDP_DATA_PATH)
 

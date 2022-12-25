@@ -83,11 +83,12 @@ class Command(BaseCommand):
             None
         """
         portfolio_soup = BeautifulSoup(content, "html.parser")
-        portfolio_name = (
-            portfolio_soup.find("h1", class_="title entry-title")
-            .text.split(":")[0]
-            .strip()
-        )
+
+        title = portfolio_soup.find("h1", class_="title entry-title")
+        if title is None:
+            raise Exception("Portfolio title not found")
+
+        portfolio_name = title.text.split(":")[0].strip()
         lazy_portfolio, created = Portfolio.objects.get_or_create(name=portfolio_name)
         if created:
             print(f"New portfolio {lazy_portfolio} has been created")
