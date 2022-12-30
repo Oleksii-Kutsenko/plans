@@ -53,9 +53,7 @@ class Command(BaseCommand):
             country_name = search_results[0].name
             country_iso_code = search_results[0].alpha_3
 
-            country, _ = Country.objects.get_or_create(
-                name=country_name, iso_code=country_iso_code
-            )
+            country = Country.objects.get(name=country_name, iso_code=country_iso_code)
             CountryGDP.objects.create(
                 country=country,
                 value=row[current_year],

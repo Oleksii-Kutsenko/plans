@@ -32,10 +32,11 @@ class Command(BaseCommand):
         country_paying_taxes_index_objects = []
         for _, row in taxes_dataframe.iterrows():
             country_name = MappingSolver.get_country_name(row["Location"])
-            search_results = pycountry.countries.search_fuzzy(country_name)
 
-            country, _ = Country.objects.get_or_create(
-                iso_code=search_results[0].alpha_3, name=search_results[0].name
+            search_result = pycountry.countries.search_fuzzy(country_name)[0]
+
+            country = Country.objects.get(
+                iso_code=search_result.alpha_3, name=search_result.name
             )
 
             country_paying_taxes_index_objects.append(

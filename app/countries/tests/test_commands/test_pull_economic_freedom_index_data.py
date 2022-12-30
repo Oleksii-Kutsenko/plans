@@ -6,10 +6,10 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from countries.management.commands.pull_economic_freedom_index_data import Command
-from countries.models import CountryEconomicFreedomIndex, Country
+from countries.models import CountryEconomicFreedomIndex
 
 
-class PullEconomicFreedomIndexDataTestCase(TestCase):
+class PullEconomicFreedomIndexDataTestCases(TestCase):
     """
     TestCases for pull_countries_data command
     """
@@ -50,11 +50,9 @@ class PullEconomicFreedomIndexDataTestCase(TestCase):
         Returns:
             None
         """
-        expected_countries_number = 176
-        expected_index_data_number = 176
+        expected_index_data_number = 175
         call_command("pull_economic_freedom_index_data")
 
-        self.assertEqual(Country.objects.count(), expected_countries_number)
         self.assertEqual(
             CountryEconomicFreedomIndex.objects.count(), expected_index_data_number
         )
