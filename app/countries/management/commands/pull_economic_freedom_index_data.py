@@ -12,6 +12,7 @@ import requests
 from bs4 import BeautifulSoup
 from django.core.management.base import BaseCommand, CommandParser
 
+from .counties_mapping import territories_regions_unrecognized_countries
 from ...models import CountryEconomicFreedomIndex, Country
 
 
@@ -101,7 +102,7 @@ class Command(BaseCommand):
                         break
                     if table_data["class"][0] == "country":
                         country_name = table_data.text
-                        if country_name == "Kosovo":
+                        if country_name in territories_regions_unrecognized_countries:
                             # Skip unrecognized territory
                             continue
                         if country_name in country_converter:
@@ -114,7 +115,7 @@ class Command(BaseCommand):
                             score = 0
 
                     if country and score:
-                        country_obj, _ = Country.objects.get_or_create(
+                        country_obj = Country.objects.get(
                             iso_code=country.alpha_3, name=country.name
                         )
                         country_economic_freedom_index_objects.append(
@@ -141,18 +142,23 @@ class Command(BaseCommand):
         eco_dataframe = pd.read_excel(self.get_economic_freedom_index_data_path())
         country_economic_freedom_index_objects = []
         for _, row in eco_dataframe.iterrows():
-            country = Country.objects.get_or_create(
+            if row["country__name"] in territories_regions_unrecognized_countries:
+                # Skip unrecognized territory
+                continue
+
+            country = Country.objects.get(
                 iso_code=row["country__iso_code"],
                 name=pycountry.countries.get(alpha_3=row["country__iso_code"]).name,
-            )[0]
+            )
             country_economic_freedom_index_objects.append(
                 CountryEconomicFreedomIndex(
                     country=country,
-                    value=row["score"],
+                    value=row["value"],
                     year=row["year"],
                 )
             )
 
+        CountryEconomicFreedomIndex.objects.all().delete()
         CountryEconomicFreedomIndex.objects.bulk_create(
             country_economic_freedom_index_objects
         )

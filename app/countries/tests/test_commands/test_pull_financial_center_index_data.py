@@ -1,4 +1,3 @@
-import re
 from unittest import TestCase
 
 from django.core.management import call_command
@@ -15,21 +14,12 @@ class PullFinancialCenterIndexDataTests(TestCase):
         Returns:
             None
         """
-        pages = Command.get_pages()
         expected_rating_total = 0
-        current_index = 1
-        for page in pages:
-            text = page.extract_text()
-            for line in text.split("\n"):
-                match = re.search(
-                    Command.RATING_EXTRACTION_REGEX.format(current_index=current_index),
-                    line,
-                )
-                if match:
-                    matched_string = match.group()
-                    _, raw_rating = matched_string.split(f" {current_index} ")
-                    expected_rating_total += int(raw_rating.strip())
-                    current_index += 1
+        pages = Command.get_pages()
+        matches = Command.extract_matches(pages)
+        countries_rating = Command.replace_cities_with_countries(matches)
+        for _, _, rating in countries_rating:
+            expected_rating_total += rating
 
         call_command("pull_financial_center_index_data")
 

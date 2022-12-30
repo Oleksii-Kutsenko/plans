@@ -31,7 +31,7 @@ class Command(BaseCommand):
 
             try:
                 search_results = pycountry.countries.search_fuzzy(country_name)
-                country, _ = Country.objects.get_or_create(
+                country = Country.objects.get(
                     iso_code=search_results[0].alpha_3, name=search_results[0].name
                 )
 

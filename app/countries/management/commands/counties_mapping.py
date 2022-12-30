@@ -1,6 +1,7 @@
 class MappingSolver:
     """
-    Class that returns the correct country or city name when the raw name is different from the one in the database
+    Class that returns the correct country or city name when the raw name is different from the
+    one in the database
     """
 
     CITIES_MAPPING = {
@@ -86,6 +87,7 @@ class MappingSolver:
 
 territories_regions_unrecognized_countries = {
     "Hong Kong SAR",
+    "Hong Kong",
     "Macao SAR",
     "Kosovo",
     "Taiwan Province of China",
@@ -137,4 +139,27 @@ territories_regions_unrecognized_countries = {
     "Wallis and Futuna Islands",
     "Curaçao",
     "Sint Maarten",
+    "Puerto Rico",
+    "Taiwan, Province of China",
+    "Taipei",
+    "Taiwan",
+    "American Samoa",
+    "Bermuda",
+    "Cayman Islands",
+    "Cook Islands",
+    "French Polynesia",
+    "Greenland",
+    "Guam",
+    "Montserrat",
+    "Bonaire, Sint Eustatius and Saba",
+    "New Caledonia",
+    "Niue",
+    "Northern Mariana Islands",
+    "Anguilla",
+    "Saint Pierre and Miquelon",
+    "Tokelau",
+    "Turks and Caicos Islands",
+    "Guernsey",
+    "Virgin Islands, British",
+    "Gibraltar",
 }

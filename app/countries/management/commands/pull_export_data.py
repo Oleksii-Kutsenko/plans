@@ -39,7 +39,7 @@ class Command(BaseCommand):
                 country_iso_code = search_results[0].alpha_3
                 country_name = search_results[0].name
 
-                country, _ = Country.objects.get_or_create(
+                country = Country.objects.get(
                     name=country_name, iso_code=country_iso_code
                 )
                 country_exports_objs.append(
