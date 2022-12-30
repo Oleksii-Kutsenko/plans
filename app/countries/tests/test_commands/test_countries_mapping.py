@@ -1,19 +1,20 @@
 from unittest import TestCase
 
-from countries.management.commands.counties_mapping import ProblematicCountriesSolver
+from countries.management.commands.counties_mapping import MappingSolver
 
 
 class CountiesMappingTests(TestCase):
     """
     Tests for countries mapping
     """
+
     def test_problematic_country_mapping(self) -> None:
         """
         Test that problematic country name is solved
         Returns:
             None
         """
-        problematic_countries_solver = ProblematicCountriesSolver()
+        problematic_countries_solver = MappingSolver()
         expected_country_name = "United Arab Emirates"
         problematic_country = "UAE"
 
@@ -29,7 +30,7 @@ class CountiesMappingTests(TestCase):
         Returns:
             None
         """
-        problematic_countries_solver = ProblematicCountriesSolver()
+        problematic_countries_solver = MappingSolver()
         expected_country_name = "United States"
         country_name = "United States"
 

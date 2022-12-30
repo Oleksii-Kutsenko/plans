@@ -1,7 +1,25 @@
-class ProblematicCountriesSolver:
+class MappingSolver:
     """
-    Class that returns correct country name for problematic countries names
+    Class that returns the correct country or city name when the raw name is different from the one in the database
     """
+
+    CITIES_MAPPING = {
+        "jersey": "Jersey City",
+        "malta": "Valletta",
+        "cayman islands": "George Town",
+        "guernsey": "St Peter Port",
+        "bermuda": "Hamilton",
+        "liechtenstein": "Vaduz",
+        "gift city -gujarat": "Ahmedabad",
+        "cyprus": "Nicosia",
+        "isle of man": "Douglas",
+        "bahrain": "Manama",
+        "british virgin islands": "Road Town",
+        "mauritius": "Port Louis",
+        "bahamas": "Nassau",
+        "trinidad and tobago": "Port of Spain",
+        "barbados": "Bridgetown",
+    }
 
     COUNTRIES_MAPPING = {
         "korea, rep.": "Korea, Republic of",
@@ -45,6 +63,20 @@ class ProblematicCountriesSolver:
         if country_name.lower() in cls.COUNTRIES_MAPPING:
             return cls.COUNTRIES_MAPPING[country_name.lower()]
         return country_name
+
+    @classmethod
+    def get_city_name(cls, city_name: str) -> str:
+        """
+        Returns city name from CITIES_MAPPING if it exists
+        Args:
+            city_name: possible problematic city name
+
+        Returns:
+            str: valid city name
+        """
+        if city_name.lower() in cls.CITIES_MAPPING:
+            return cls.CITIES_MAPPING[city_name.lower()]
+        return city_name
 
 
 territories_regions_unrecognized_countries = {

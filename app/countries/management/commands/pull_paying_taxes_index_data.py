@@ -6,7 +6,7 @@ import pycountry
 from django.core.management.base import BaseCommand
 
 from countries.management.commands.counties_mapping import (
-    ProblematicCountriesSolver,
+    MappingSolver,
     territories_regions_unrecognized_countries,
 )
 from countries.models import CountryPayingTaxesIndex, Country
@@ -31,7 +31,7 @@ class Command(BaseCommand):
         CountryPayingTaxesIndex.objects.all().delete()
         country_paying_taxes_index_objects = []
         for _, row in taxes_dataframe.iterrows():
-            country_name = ProblematicCountriesSolver.get_country_name(row["Location"])
+            country_name = MappingSolver.get_country_name(row["Location"])
             search_results = pycountry.countries.search_fuzzy(country_name)
 
             country, _ = Country.objects.get_or_create(

@@ -46,23 +46,28 @@ class Command(BaseCommand):
             if not is_all_data_available(portfolio) or options.get(
                 "force_recalculation"
             ):
-                print(f"Calculating portfolio statistics for {portfolio.name}")
-                backtest = tfs.Backtest(portfolio.get_allocation(), rebalance="no")
+                try:
+                    print(f"Calculating portfolio statistics for {portfolio.name}")
+                    backtest = tfs.Backtest(portfolio.get_allocation(), rebalance="no")
 
-                backtest_data = PortfolioBacktestData.objects.filter(
-                    portfolio=portfolio
-                ).first()
-                if backtest_data:
-                    backtest_data.delete()
+                    backtest_data = PortfolioBacktestData.objects.filter(
+                        portfolio=portfolio
+                    ).first()
+                    if backtest_data:
+                        backtest_data.delete()
 
-                backtest_data = PortfolioBacktestData(
-                    portfolio=portfolio,
-                    cagr=backtest.cagr,
-                    market_correlation=backtest.correlation,
-                    max_drawdown=backtest.max_drawdown,
-                    sharpe=backtest.sharpe,
-                    sortino=backtest.sortino,
-                    standard_deviation=backtest.std,
-                    start_date=backtest.start_date,
-                )
-                backtest_data.save()
+                    backtest_data = PortfolioBacktestData(
+                        portfolio=portfolio,
+                        cagr=backtest.cagr,
+                        market_correlation=backtest.correlation,
+                        max_drawdown=backtest.max_drawdown,
+                        sharpe=backtest.sharpe,
+                        sortino=backtest.sortino,
+                        standard_deviation=backtest.std,
+                        start_date=backtest.start_date,
+                    )
+                    backtest_data.save()
+                except Exception as backtest_error:
+                    print(
+                        f"Error while calculating portfolio statistics: {backtest_error}"
+                    )

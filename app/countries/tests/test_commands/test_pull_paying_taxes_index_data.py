@@ -4,7 +4,7 @@ import pycountry
 from django.core.management import call_command
 
 from countries.management.commands.counties_mapping import (
-    ProblematicCountriesSolver,
+    MappingSolver,
 )
 from countries.management.commands.pull_paying_taxes_index_data import Command
 from countries.models import CountryPayingTaxesIndex
@@ -23,7 +23,7 @@ class PullPayingTaxesIndexDataTest(TestCase):
 
         expected_index_data_number = 0
         for _, row in taxes_dataframe.iterrows():
-            country_name = ProblematicCountriesSolver.get_country_name(row["Location"])
+            country_name = MappingSolver.get_country_name(row["Location"])
             pycountry.countries.search_fuzzy(country_name)
             expected_index_data_number += 1
 
