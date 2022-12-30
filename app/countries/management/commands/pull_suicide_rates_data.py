@@ -5,7 +5,7 @@ import pandas as pd
 import pycountry
 from django.core.management import BaseCommand
 
-from countries.management.commands.counties_mapping import ProblematicCountriesSolver
+from countries.management.commands.counties_mapping import MappingSolver
 from countries.models import CountrySuicideRate, Country
 
 
@@ -27,7 +27,7 @@ class Command(BaseCommand):
         country_suicide_rate_objects = []
 
         for _, row in suicide_dataframe.iterrows():
-            country_name = ProblematicCountriesSolver.get_country_name(row[0])
+            country_name = MappingSolver.get_country_name(row[0])
 
             try:
                 search_results = pycountry.countries.search_fuzzy(country_name)

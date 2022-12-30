@@ -121,3 +121,9 @@ class CountryGDP(BaseCountryRatingComponent):
     """
     Country GDP
     """
+
+
+class CountryGlobalFinancialCenterIndex(BaseCountryRatingComponent):
+    """
+    Country Global Financial Center Index
+    """

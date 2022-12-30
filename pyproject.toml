@@ -49,9 +49,6 @@ disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
 
-# Restrict dynamic typing
-warn_return_any = true
-
 # Know exactly what you're doing
 warn_redundant_casts = true
 warn_unused_ignores = true

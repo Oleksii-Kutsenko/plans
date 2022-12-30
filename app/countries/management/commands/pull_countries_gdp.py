@@ -7,7 +7,7 @@ import pycountry
 from django.core.management import BaseCommand
 
 from countries.management.commands.counties_mapping import (
-    ProblematicCountriesSolver,
+    MappingSolver,
     territories_regions_unrecognized_countries,
 )
 from countries.models import Country, CountryGDP
@@ -47,9 +47,7 @@ class Command(BaseCommand):
                 # skip territories and regions
                 continue
 
-            raw_country_name = ProblematicCountriesSolver.get_country_name(
-                raw_country_name
-            )
+            raw_country_name = MappingSolver.get_country_name(raw_country_name)
             search_results = pycountry.countries.search_fuzzy(raw_country_name)
 
             country_name = search_results[0].name

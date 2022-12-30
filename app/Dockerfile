@@ -16,7 +16,7 @@ RUN pip install --upgrade pip
 COPY ./requirements-dev.txt .
 COPY ./requirements-tests.txt .
 COPY ./requirements.txt .
-RUN pip install -r requirements-dev.txt
+RUN pip install -r requirements-tests.txt
 
 # copy project
 COPY . .

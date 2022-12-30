@@ -1,2 +1,6 @@
-prospector[with_mypy,with_bandit]==1.8.3
+bandit==1.7.4
+black==22.12.0
+mypy==0.991
+pylint==2.15.9
+vulture==2.6
 -r requirements-tests.txt
