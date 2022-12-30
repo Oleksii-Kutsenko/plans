@@ -26,26 +26,7 @@ class Command(BaseCommand):
         geonames_cache = geonamescache.GeonamesCache()
 
         pages = self.get_pages()
-
-        current_index = 1
-        matches = []
-        for page in pages:
-            text = page.extract_text()
-
-            for line in text.split("\n"):
-                match = re.search(
-                    self.RATING_EXTRACTION_REGEX.format(current_index=current_index),
-                    line,
-                )
-
-                if match:
-                    matched_string = match.group()
-                    city_name, raw_rating = matched_string.split(f" {current_index} ")
-                    rating = int(raw_rating.strip())
-
-                    matches.append((city_name, rating))
-
-                    current_index += 1
+        matches = self.extract_matches(pages)
 
         country_rating = {}
         for city_name, rating in matches:
@@ -95,6 +76,36 @@ class Command(BaseCommand):
                 )
             )
         CountryGlobalFinancialCenterIndex.objects.bulk_create(country_gfci_objects)
+
+    def extract_matches(self, pages: list[PageObject]) -> list[tuple[str, int]]:
+        """
+        Extracts city names and ratings from the pages
+        Args:
+            pages:
+
+        Returns:
+
+        """
+        current_index = 1
+        matches = []
+        for page in pages:
+            text = page.extract_text()
+
+            for line in text.split("\n"):
+                match = re.search(
+                    self.RATING_EXTRACTION_REGEX.format(current_index=current_index),
+                    line,
+                )
+
+                if match:
+                    matched_string = match.group()
+                    city_name, raw_rating = matched_string.split(f" {current_index} ")
+                    rating = int(raw_rating.strip())
+
+                    matches.append((city_name, rating))
+
+                    current_index += 1
+        return matches
 
     @classmethod
     def get_pages(cls) -> list[PageObject]:

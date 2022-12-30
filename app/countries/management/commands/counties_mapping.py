@@ -48,6 +48,11 @@ class MappingSolver:
         "micronesia, fed. states of": "Micronesia, Federated States of",
         "south sudan, republic of": "South Sudan",
         "türkiye, republic of": "Turkey",
+        "bahrain, kingdom of": "Kingdom of Bahrain",
+        "democratic republic of the congo": "Congo, The Democratic Republic of the",
+        "kuwait, the state of": "State of Kuwait",
+        "saudi arabia, kingdom of": "Kingdom of Saudi Arabia",
+        "türkiye": "Turkey",
     }
 
     @classmethod
@@ -124,4 +129,12 @@ territories_regions_unrecognized_countries = {
     "OECD high income",
     "Taiwan, China",
     "Hong Kong SAR, China",
+    "Chinese Taipei",
+    "Hong Kong, China",
+    "Macao, China",
+    "Aruba",
+    "Aruba, the Netherlands with respect to",
+    "Wallis and Futuna Islands",
+    "Curaçao",
+    "Sint Maarten",
 }
