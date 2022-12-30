@@ -127,3 +127,9 @@ class CountryGlobalFinancialCenterIndex(BaseCountryRatingComponent):
     """
     Country Global Financial Center Index
     """
+
+
+class CountryExportsValue(BaseCountryRatingComponent):
+    """
+    Country Exports value in millions of USD
+    """

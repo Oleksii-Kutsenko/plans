@@ -14,6 +14,7 @@ from countries.models import (
     CountryReserveCurrency,
     CountryGDP,
     CountryGlobalFinancialCenterIndex,
+    CountryExportsValue,
 )
 
 
@@ -54,6 +55,9 @@ class RatingCalculatorSettings:
         "financial_center_index": ComponentSetting(
             orm_key="countryglobalfinancialcenterindex",
             model=CountryGlobalFinancialCenterIndex,
+        ),
+        "export": ComponentSetting(
+            orm_key="countryexportsvalue", model=CountryExportsValue
         ),
     }
 
