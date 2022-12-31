@@ -7,6 +7,10 @@ from countries.tests.factories.country import CountryFactory
 
 
 class UserFactory(factory.DjangoModelFactory):
+    """
+    Factory for the User model
+    """
+
     birth_date = factory.fuzzy.FuzzyDate(
         start_date=datetime.date.today() - datetime.timedelta(days=100 * 365),
         end_date=datetime.date.today() - datetime.timedelta(days=18 * 365),
