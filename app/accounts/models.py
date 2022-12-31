@@ -60,7 +60,7 @@ class User(AbstractUser):
         """
         if self.gender:
             return getattr(
-                self.country.pension_system_information,
+                self.country.pension_system_information,  # pylint: disable=no-member
                 f"{self.gender.lower()}_life_expectancy",
                 None,
             )
@@ -74,7 +74,7 @@ class User(AbstractUser):
         """
         if self.gender:
             return getattr(
-                self.country.pension_system_information,
+                self.country.pension_system_information,  # pylint: disable=no-member
                 f"{self.gender.lower()}_pension_age",
                 None,
             )

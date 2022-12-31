@@ -54,6 +54,8 @@ class MappingSolver:
         "kuwait, the state of": "State of Kuwait",
         "saudi arabia, kingdom of": "Kingdom of Saudi Arabia",
         "türkiye": "Turkey",
+        "ivory coast": "Republic of Côte d'Ivoire",
+        "laos": "Lao People's Democratic Republic",
     }
 
     @classmethod

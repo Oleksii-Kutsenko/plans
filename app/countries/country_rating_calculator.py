@@ -16,6 +16,7 @@ from countries.models import (
     CountryGlobalFinancialCenterIndex,
     CountryExportsValue,
     CountryTotalTradeValue,
+    CountryMilitaryStrength,
 )
 
 
@@ -62,6 +63,11 @@ class RatingCalculatorSettings:
         ),
         "total_trade": ComponentSetting(
             orm_key="countrytotaltradevalue", model=CountryTotalTradeValue
+        ),
+        "military_strength": ComponentSetting(
+            orm_key="countrymilitarystrength",
+            model=CountryMilitaryStrength,
+            inverted=True,
         ),
     }
 

@@ -139,3 +139,9 @@ class CountryTotalTradeValue(BaseCountryRatingComponent):
     """
     Country Imports value in millions of USD
     """
+
+
+class CountryMilitaryStrength(BaseCountryRatingComponent):
+    """
+    Country Military Strength
+    """
