@@ -6,17 +6,10 @@ from countries.models import (
 
 
 class CountrySerializer(serializers.ModelSerializer):
-    countryeconomicfreedomindex__score = serializers.FloatField()
-    countryeconomicfreedomindex__year = serializers.IntegerField()
-    countrypayingtaxesindex__score = serializers.FloatField()
-    countrypayingtaxesindex__year = serializers.IntegerField()
+    """
+    Serializer for the Country model
+    """
 
     class Meta:
         model = Country
-        fields = (
-            "name",
-            "countryeconomicfreedomindex__score",
-            "countryeconomicfreedomindex__year",
-            "countrypayingtaxesindex__score",
-            "countrypayingtaxesindex__year",
-        )
+        fields = ("name",)

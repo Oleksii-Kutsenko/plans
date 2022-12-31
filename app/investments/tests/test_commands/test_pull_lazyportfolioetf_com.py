@@ -60,11 +60,8 @@ def generate_portfolio_page() -> str:
             </td>
         </tr>
         """
-    portfolio_html += """
-        </tbody>
-    </table>
-    </html>
-    """
+
+    portfolio_html += """</tbody></table></html>"""
     return portfolio_html
 
 

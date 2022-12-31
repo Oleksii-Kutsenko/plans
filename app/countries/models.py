@@ -145,3 +145,9 @@ class CountryMilitaryStrength(BaseCountryRatingComponent):
     """
     Country Military Strength
     """
+
+
+class CountryNatureIndex(BaseCountryRatingComponent):
+    """
+    Country Nature Index
+    """

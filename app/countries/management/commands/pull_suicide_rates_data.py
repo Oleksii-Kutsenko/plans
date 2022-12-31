@@ -23,7 +23,6 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:
         suicide_dataframe = pd.read_excel(self.SUICIDE_RATES_DATA_PATH, header=None)
 
-        CountrySuicideRate.objects.all().delete()
         country_suicide_rate_objects = []
 
         for _, row in suicide_dataframe.iterrows():
@@ -45,4 +44,5 @@ class Command(BaseCommand):
             except LookupError as error:
                 print(f"Country {row[0]} not found. Reason: {error}")
 
+        CountrySuicideRate.objects.all().delete()
         CountrySuicideRate.objects.bulk_create(country_suicide_rate_objects)

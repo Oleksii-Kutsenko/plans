@@ -13,6 +13,10 @@ from countries.models import Country, CountryMilitaryStrength
 
 
 class Command(BaseCommand):
+    """
+    Command that fetches countries Military Strength data from HTML page
+    """
+
     help = "Pulls Global Firepower Military Strength Data"
     MILITARY_STRENGTH_DATA_PATH = (
         "https://www.globalfirepower.com/countries-listing.php"

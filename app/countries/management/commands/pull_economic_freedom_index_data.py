@@ -2,7 +2,6 @@
 Command to pull countries data from the web page or load old data from the file
 """
 from datetime import date
-from enum import Enum
 from pathlib import Path
 from typing import Any
 
@@ -13,18 +12,8 @@ from bs4 import BeautifulSoup
 from django.core.management.base import BaseCommand, CommandParser
 
 from .counties_mapping import territories_regions_unrecognized_countries
+from .html_tag_utils import HTMLTagName
 from ...models import CountryEconomicFreedomIndex, Country
-
-
-class HTMLTagName(Enum):
-    """
-    Enum of HTML Tags for parsing convenience
-    """
-
-    TD = "td"
-    TH = "th"
-    TR = "tr"
-
 
 country_converter = {
     "Republic of Congo": "Republic of the Congo",
