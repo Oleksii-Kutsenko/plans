@@ -56,6 +56,9 @@ class MappingSolver:
         "türkiye": "Turkey",
         "ivory coast": "Republic of Côte d'Ivoire",
         "laos": "Lao People's Democratic Republic",
+        "united states of america (usa)": "United States",
+        "united kingdom (uk)": "United Kingdom",
+        "cape verde": "Republic of Cabo Verde",
     }
 
     @classmethod
@@ -164,4 +167,10 @@ territories_regions_unrecognized_countries = {
     "Guernsey",
     "Virgin Islands, British",
     "Gibraltar",
+    "International",
+    "Palestinian territories",
+    "Vatican City State (Holy See)",
+    "Reunion",
+    "Faroe Islands",
+    "Martinique",
 }

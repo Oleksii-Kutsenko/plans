@@ -21,4 +21,5 @@ class CountryViewSet(viewsets.ModelViewSet):
 
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         country_rating_calculator = CountryRatingCalculator()
+        country_rating_calculator.dataframe.to_excel("country_rating.xlsx")
         return Response(country_rating_calculator.dataframe.to_dict("records"))

@@ -17,11 +17,16 @@ from countries.models import (
     CountryExportsValue,
     CountryTotalTradeValue,
     CountryMilitaryStrength,
+    CountryNatureIndex,
 )
 
 
 @dataclass
 class ComponentSetting:
+    """
+    Class contains settings for the rating component
+    """
+
     orm_key: str
     model: Type[models.Model]
     inverted: bool = False
@@ -68,6 +73,10 @@ class RatingCalculatorSettings:
             orm_key="countrymilitarystrength",
             model=CountryMilitaryStrength,
             inverted=True,
+        ),
+        "nature_index": ComponentSetting(
+            orm_key="countrynatureindex",
+            model=CountryNatureIndex,
         ),
     }
 

@@ -51,6 +51,14 @@ class Command(BaseCommand):
 
     @staticmethod
     def process_taxes_dataframe(paying_taxes_index_data_path: Path) -> pd.DataFrame:
+        """
+        Excludes headers, cities adn territories from dataframe
+        Args:
+            paying_taxes_index_data_path: Path to Excel file with Paying Taxes Index data
+
+        Returns:
+            Ready to use dataframe
+        """
         taxes_dataframe = pd.read_excel(paying_taxes_index_data_path)
         taxes_dataframe = taxes_dataframe.query(
             "`Unnamed: 0` not in ('Location', 'Region')"
