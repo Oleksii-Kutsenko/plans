@@ -133,3 +133,9 @@ class CountryExportsValue(BaseCountryRatingComponent):
     """
     Country Exports value in millions of USD
     """
+
+
+class CountryTotalTradeValue(BaseCountryRatingComponent):
+    """
+    Country Imports value in millions of USD
+    """

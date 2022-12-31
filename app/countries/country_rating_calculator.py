@@ -15,6 +15,7 @@ from countries.models import (
     CountryGDP,
     CountryGlobalFinancialCenterIndex,
     CountryExportsValue,
+    CountryTotalTradeValue,
 )
 
 
@@ -58,6 +59,9 @@ class RatingCalculatorSettings:
         ),
         "export": ComponentSetting(
             orm_key="countryexportsvalue", model=CountryExportsValue
+        ),
+        "total_trade": ComponentSetting(
+            orm_key="countrytotaltradevalue", model=CountryTotalTradeValue
         ),
     }
 

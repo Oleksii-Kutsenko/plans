@@ -5,6 +5,10 @@ from countries.tests.factories.country import CountryFactory
 
 
 class PensionSystemInformationFactory(factory.DjangoModelFactory):
+    """
+    Factory the PensionSystemInformation model
+    """
+
     country = factory.SubFactory(CountryFactory)
     male_life_expectancy = factory.fuzzy.FuzzyFloat(50, 80)
     female_life_expectancy = factory.fuzzy.FuzzyFloat(55, 90)
