@@ -18,6 +18,7 @@ from countries.models import (
     CountryTotalTradeValue,
     CountryMilitaryStrength,
     CountryNatureIndex,
+    CountryPisaScore,
 )
 
 
@@ -77,6 +78,10 @@ class RatingCalculatorSettings:
         "nature_index": ComponentSetting(
             orm_key="countrynatureindex",
             model=CountryNatureIndex,
+        ),
+        "pisa": ComponentSetting(
+            orm_key="countrypisascore",
+            model=CountryPisaScore,
         ),
     }
 

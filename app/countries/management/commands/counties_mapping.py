@@ -59,6 +59,7 @@ class MappingSolver:
         "united states of america (usa)": "United States",
         "united kingdom (uk)": "United Kingdom",
         "cape verde": "Republic of Cabo Verde",
+        "china (beijing, shanghai, jiangsu, zhejiang)": "China",
     }
 
     @classmethod
@@ -173,4 +174,5 @@ territories_regions_unrecognized_countries = {
     "Reunion",
     "Faroe Islands",
     "Martinique",
+    "Macao",
 }

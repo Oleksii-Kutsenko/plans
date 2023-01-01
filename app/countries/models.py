@@ -151,3 +151,9 @@ class CountryNatureIndex(BaseCountryRatingComponent):
     """
     Country Nature Index
     """
+
+
+class CountryPisaScore(BaseCountryRatingComponent):
+    """
+    Country Pisa Score
+    """
