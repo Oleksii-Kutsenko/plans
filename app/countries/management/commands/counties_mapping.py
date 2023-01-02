@@ -60,6 +60,8 @@ class MappingSolver:
         "united kingdom (uk)": "United Kingdom",
         "cape verde": "Republic of Cabo Verde",
         "china (beijing, shanghai, jiangsu, zhejiang)": "China",
+        "cote d'ivoire (ivory coast)": "Republic of Côte d'Ivoire",
+        "congo (dem. rep.)": "Congo, The Democratic Republic of the",
     }
 
     @classmethod
@@ -175,4 +177,6 @@ territories_regions_unrecognized_countries = {
     "Faroe Islands",
     "Martinique",
     "Macao",
+    "Vatican City",
+    "Palestinian Territories",
 }

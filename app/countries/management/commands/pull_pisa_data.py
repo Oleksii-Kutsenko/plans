@@ -25,7 +25,7 @@ class Command(BaseCommand):
             self.PISA_DATA_PATH, header=None, names=["country", "score"]
         )
 
-        country_codes = dict(Country.objects.values_list("iso_code", "id"))
+        countries_codes = dict(Country.objects.values_list("iso_code", "id"))
         country_pisa_score_objects = []
         for row in pisa_dataframe.itertuples():
             raw_country_name = row.country
@@ -34,11 +34,11 @@ class Command(BaseCommand):
             raw_country_name = MappingSolver.get_country_name(raw_country_name)
             country = pycountry.countries.search_fuzzy(raw_country_name)[0]
 
-            score = int(row.score)
+            score = float(row.score)
 
             country_pisa_score_objects.append(
                 CountryPisaScore(
-                    country_id=country_codes[country.alpha_3],
+                    country_id=countries_codes[country.alpha_3],
                     value=score,
                     year=self.PISA_DATA_YEAR,
                 )
