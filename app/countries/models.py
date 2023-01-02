@@ -157,3 +157,9 @@ class CountryPisaScore(BaseCountryRatingComponent):
     """
     Country Pisa Score
     """
+
+
+class CountryPassportIndex(BaseCountryRatingComponent):
+    """
+    Country Passport Index
+    """
