@@ -18,9 +18,13 @@ class PullSuicideRatesDataCommandTestCases(TestCase):
         Returns:
             None
         """
-        suicide_dataframe = pd.read_excel(Command.SUICIDE_RATES_DATA_PATH, header=None)
-        suicide_rates_total = suicide_dataframe[1].sum()
-        suicide_rates_count = len(suicide_dataframe[0])
+        suicide_dataframe = pd.read_csv(Command.SUICIDE_RATES_DATA_PATH, skiprows=1)
+        value_column_name = suicide_dataframe.columns[-1]
+        suicide_rate_dataframe = pd.DataFrame(suicide_dataframe[value_column_name].str.split(" ").tolist())
+        suicide_rate_dataframe[0] = suicide_rate_dataframe[0].astype(float
+                                                                     )
+        suicide_rates_total = suicide_rate_dataframe[0].sum()
+        suicide_rates_count = len(suicide_rate_dataframe)
 
         call_command("pull_suicide_rates_data")
 

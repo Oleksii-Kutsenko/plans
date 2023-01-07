@@ -25,28 +25,30 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:
         response = requests.get(self.MILITARY_STRENGTH_DATA_PATH, timeout=5)
         beautiful_soup = BeautifulSoup(response.text, "html.parser")
+        if title := beautiful_soup.find("title"):
+            year = int(title.text.split(" ")[0])
+        else:
+            raise ValueError("Could not find title in response")
 
-        raw_military_strength_data = self.get_raw_military_strength_data(beautiful_soup)
+        raw_military_strength_data = self.get_raw_military_strength_data(beautiful_soup, year)
 
+        CountryMilitaryStrength.objects.filter(year=year).delete()
         self.create_countries_military_strength_objects(raw_military_strength_data)
 
     @staticmethod
     def get_raw_military_strength_data(
-        beautiful_soup: BeautifulSoup,
+        beautiful_soup: BeautifulSoup, year: int
     ) -> list[tuple[str, int, float]]:
         """
         Parses HTML page and returns raw military strength data
         Args:
+            year: Index year
             beautiful_soup: BeautifulSoup object
 
         Returns:
             list[tuple[str, int, float]]: list of tuples with country name, military strength rank
              and military strength score
         """
-        if title := beautiful_soup.find("title"):
-            year = int(title.text.split(" ")[0])
-        else:
-            raise ValueError("Could not find title in response")
         military_strength_raw_data = []
         raw_data_rows = beautiful_soup.select(".picTrans.recordsetContainer.boxShadow")
         for raw_data_row in raw_data_rows:
@@ -61,7 +63,7 @@ class Command(BaseCommand):
             country_name = MappingSolver.get_country_name(raw_country_name)
             country = pycountry.countries.search_fuzzy(country_name)[0]
 
-            if raw_military_strength_tag := raw_data_row.select_one(".textDkGray"):
+            if raw_military_strength_tag := raw_data_row.select_one(".textLarge.textLtGray"):
                 military_strength = float(
                     raw_military_strength_tag.text.strip().split(":")[1].strip()
                 )
@@ -95,5 +97,4 @@ class Command(BaseCommand):
                     year=year,
                 )
             )
-        CountryMilitaryStrength.objects.all().delete()
         CountryMilitaryStrength.objects.bulk_create(country_military_strength_objects)

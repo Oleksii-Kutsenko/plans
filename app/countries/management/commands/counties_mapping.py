@@ -54,6 +54,7 @@ class MappingSolver:
         "kuwait, the state of": "State of Kuwait",
         "saudi arabia, kingdom of": "Kingdom of Saudi Arabia",
         "türkiye": "Turkey",
+        "turkiye": "Turkey",
         "ivory coast": "Republic of Côte d'Ivoire",
         "laos": "Lao People's Democratic Republic",
         "united states of america (usa)": "United States",
@@ -62,6 +63,11 @@ class MappingSolver:
         "china (beijing, shanghai, jiangsu, zhejiang)": "China",
         "cote d'ivoire (ivory coast)": "Republic of Côte d'Ivoire",
         "congo (dem. rep.)": "Congo, The Democratic Republic of the",
+        "bolivia (plurinational state of)": "Bolivia, Plurinational State of",
+        "iran (islamic republic of)": "Iran, Islamic Republic of",
+        "micronesia (federated states of)": "Micronesia, Federated States of",
+        "venezuela (bolivarian republic of)": "Venezuela, Bolivarian Republic of",
+        "republic of korea": "Korea, Republic of",
     }
 
     @classmethod
