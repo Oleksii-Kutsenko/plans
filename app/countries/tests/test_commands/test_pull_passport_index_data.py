@@ -23,7 +23,9 @@ class PullPassportIndexDataTestCases(TestCase):
         passport_index_dataframe = pd.read_excel(
             Command.PASSPORT_INDEX_DATA_PATH, header=None, names=["country", "score"]
         )
-        passport_index_dataframe["country"] = passport_index_dataframe["country"].str.strip()
+        passport_index_dataframe["country"] = passport_index_dataframe[
+            "country"
+        ].str.strip()
         passport_index_dataframe.query(
             "country not in @territories_regions_unrecognized_countries", inplace=True
         )

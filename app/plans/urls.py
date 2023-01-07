@@ -18,17 +18,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-
-from countries.urls import countries_router
-from investments.urls import investments_router
-
-router = DefaultRouter()
-router.registry.extend(countries_router.registry)
-router.registry.extend(investments_router.registry)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include(router.urls)),
     path("silk/", include("silk.urls", namespace="silk")),
+    path("api/", include("accounts.urls")),
+    path("api/", include("countries.urls")),
+    path("api/", include("investments.urls")),
 ]
